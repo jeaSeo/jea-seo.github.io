@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="../js/chartjs/chart.js"></script>
+    <script src="../js/danfo0.1.1/index.min.js"></script>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <div class="summary">
+            <h1 id="title">당신의 웹툰은?</h1>
+            <ul class="result_list">
+                <li class="item">
+                    <a href="detail.html" class="iten_anchor">
+                        <div class="part">조회수</div>
+                        <div>
+                            <span id="score1"></span>
+                            <span id="state1"></span>
+                        </div>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="detail.html" class="iten_anchor">
+                        <div class="part">평점</div>
+                        <div>
+                            <span id="score2"></span>
+                            <span id="state2"></span>
+                        </div>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="detail.html" class="iten_anchor">
+                        <div class="part">댓글 수</div>
+                        <div>
+                            <span id="score3"></span>
+                            <span id="state3"></span>
+                        </div>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="detail.html" class="iten_anchor">
+                        <div class="part">?</div>
+                        <div>
+                            <span id="score4"></span>
+                            <span id="state4"></span>
+                        </div>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="detail.html" class="iten_anchor">
+                    <div class="part">??</div>
+                        <div>
+                            <span id="score5"></span>
+                            <span id="state5"></span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        let lastData
+        if(localStorage.getItem('id')){
+            lastData = localStorage.getItem('id')
+        }
+        
+        let ar
+        let armax = 0
+        // labels 
+        let dataLabel = ['id', 'title', 'thumbnail', 'view', 'rating', 'commentCount',
+       'commentKeyword', 'totalView', 'totalRate', 'totalCommentCount','genPer', 'totalPer']
+        const readCsv = (path) => {
+            let arcnt = 0
+            dfd.read_csv(path)
+            .then(df => {
+                // 데이터 순서 rating, people, view, id
+                ar = df.values
+                armax = df.max().data
+    
+            }).then(function(){
+    
+                arcnt = Array.from({length:ar.length}, (v,i)=>i+1+'회')
+                let maxindex1, maxindex2
+                
+                for(let j=0;j<ar.length;j++){
+                    ardata1 = Array.from(ar, x => x.at(0)) // rating
+                    ardata2 = Array.from(ar, x => x.at(1)) // people
+    
+                    if (ar.at(j).at(0) === Math.round(armax.at(0) * 100)/100) {
+                        maxindex1 = j // max index
+                    } 
+                    if (ar.at(j).at(1) === Math.round(armax.at(1) * 100)/100){
+                        maxindex2 = j // max index
+                    }
+                }
+                
+            }).then(function(){
+                let comment_target1 = document.getElementById('score1')
+                let comment_target2 = document.getElementById('state1')
+                let comments1 = ''
+                let comments2 = ''
+                comments1 += 'NN' + '%'
+                comments2 += '높다'
+                comment_target1.innerHTML = comments1
+                comment_target2.innerHTML = comments2
+            }).then(function(){
+                let comment_target1 = document.getElementById('score2')
+                let comment_target2 = document.getElementById('state2')
+                let comments1 = ''
+                let comments2 = ''
+                comments1 += '52' + '%'
+                comments2 += '낮다'
+                comment_target1.innerHTML = comments1
+                comment_target2.innerHTML = comments2
+            }).then(function(){
+                let comment_target1 = document.getElementById('score3')
+                let comment_target2 = document.getElementById('state3')
+                let comments1 = ''
+                let comments2 = ''
+                comments1 += '24' + '%'
+                comments2 += '낮다'
+                comment_target1.innerHTML = comments1
+                comment_target2.innerHTML = comments2
+            }).then(function(){
+                let comment_target1 = document.getElementById('score4')
+                let comment_target2 = document.getElementById('state4')
+                let comments1 = ''
+                let comments2 = ''
+                comments1 += '1' + '%'
+                comments2 += '높다'
+                comment_target1.innerHTML = comments1
+                comment_target2.innerHTML = comments2
+            }).then(function(){
+                let comment_target1 = document.getElementById('score5')
+                let comment_target2 = document.getElementById('state5')
+                let comments1 = ''
+                let comments2 = ''
+                comments1 += '5' + '%'
+                comments2 += '낮다'
+                comment_target1.innerHTML = comments1
+                comment_target2.innerHTML = comments2
+            }).catch(err => {
+                console.log(err);
+            })
+        }
+        // readCsv("data/total/idl_772265.csv")
+        // readCsv("./data/total/idl_398327.csv")
+        readCsv("../data/total/"+lastData)
+        localStorage.setItem('id',lastData);
+        console.log('현재 실행 중 파일은 '+lastData+'입니다.')
+    </script>
+</body>
+</html>
