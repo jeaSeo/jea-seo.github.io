@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>작전명: 띵작을 찾아서</title>
+    <title>Document</title>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="../js/chartjs/chart.js"></script>
@@ -26,33 +26,39 @@
     <div id="wrap">
         <div class="slider">
             <div class="comp">
-                <h4 class="title" id="data3_title"></h4>
+                <h4 class="title">문석 모델이다</h4>
                 <div>
                     <canvas id="myChart3"></canvas>
                 </div>
                 <div class="analysis">
-                    <div class="title">분석결과</div>
-                    <div id="data3_analysis"></div>
+                    <h4 class="f1">분석결과</h4>
+                    <p id="data3_analysis">
+                        당신의 결과는 이러쿵 저러쿵 <em>강조강조</em> 이걸 저렇게 하삼
+                    </p>
                 </div>
             </div>
             <div class="comp">
-                <h4 class="title" id="data4_title"></h4>
+                <h4 class="title">문석 모델이다</h4>
                 <div>
                     <canvas id="myChart4"></canvas>
                 </div>
                 <div class="analysis">
-                    <div class="title">분석결과</div>
-                    <div id="data4_analysis"></div>
+                    <h4 class="f1">분석결과</h4>
+                    <p id="data4_analysis">
+                        당신의 결과는 이러쿵 저러쿵 <em>강조강조</em> 이걸 저렇게 하삼
+                    </p>
                 </div>
             </div>
             <div class="comp">
-                <h4 class="title" id="data5_title"></h4>
+                <h4 class="title">문석 모델이다</h4>
                 <div>
                     <canvas id="myChart5"></canvas>
                 </div>
                 <div class="analysis">
-                    <div class="title">분석결과</div>
-                    <div id="data5_analysis"></div>
+                    <h4 class="f1">분석결과</h4>
+                    <p id="data5_analysis">
+                        당신의 결과는 이러쿵 저러쿵 <em>강조강조</em> 이걸 저렇게 하삼
+                    </p>
                 </div>
             </div>
         </div>
@@ -68,182 +74,88 @@
             (Number(lastData)>714582) ? 'result3.csv' : 'result1.csv'
         }
         let gbId, gbLabel
-        let ar, armax, armin, aridIndex, artitle, arlabel, arcmmtcnt, promote5, promote10
+        let ar, armax, armin, artitle, arlabel, arcmmtcnt
         let arPositive, arView, arRating
-        let first_positive_5, second_view_1, third_rating_people_5
-        let first_positive_5_1, second_view_1_1, third_rating_people_5_1
-        let first_positive_5_genre, second_view_1_genre, third_rating_people_5_genre
-        let arPositiveTotal, arViewTotal, arRatingTotal
         let arPosKeyword1, arPosKeyword2, arPosKeyword3
         let arNegKeyword1, arNegKeyword2, arNegKeyword3
         let maxindex3, maxindex4, maxindex5
         let minindex3, minindex4, minindex5
+
         // labels 
-        const dataLabel = ['id', 'title', '5th', '10th', 
+        let dataLabel = ['id', 'title', '5th', '10th', 
         'first_positive_5', 'second_view_1','third_rating_people_5', 
-        'first_positive_5_1', 'second_view_1_1',
-        'third_rating_people_5_1', 'first_positive_5_episode',
-        'second_view_1_episode', 'third_rating_people_5_episode', 'positive',
-        'view', 'rating_people', 'positive_1', 'view_1', 'rating_people_1',
-        'positive_episode', 'view_episode', 'rating_people_episode',
-        'comment_writer_count', 'comment_writer', 'pos_keyword_1',
-        'pos_keyword_2', 'pos_keyword_3', 'neg_keyword_1', 'neg_keyword_2',
-        'neg_keyword_3', 'label', 'first_positive_5_story',
-        'second_view_1_story', 'third_rating_people_5_story', 'positive_story',
-        'view_story', 'rating_people_story', 'first_positive_5_omnibus',
-        'second_view_1_omnibus', 'third_rating_people_5_omnibus',
-        'positive_omnibus', 'view_omnibus', 'rating_people_omnibus']
+        'first_positive_5_1', 'second_view_1_1','third_rating_people_5_1', 
+        'first_positive_5_story','second_view_1_story', 'third_rating_people_5_story', 
+        'positive','view', 'rating_people', 
+        'positive_1', 'view_1', 'rating_people_1',
+        'positive_story', 'view_story', 'rating_people_story',
+        'comment_writer_count', 'comment_writer', 
+        'pos_keyword_1', 'pos_keyword_2', 'pos_keyword_3', 
+        'neg_keyword_1', 'neg_keyword_2', 'neg_keyword_3', 'label']
 
-        const userLabel = ['id', '제목', '5회차 기준 승격확률', '10회차 기준 승격확률', 
-        '5회차 긍정댓글수', '1회차 조회수', '5회차 평점참여인원', 
-        '정식승격 작품의 5회차 긍정댓글수 평균', '정식승격 작품의 1회차 조회수 평균','정식승격 작품의 5회차 평점참여인원 평균', 
-        '동일 전개방식 작품의 5회차의 긍정댓글수','동일 전개방식 작품의 1회차의 조회수', '동일 전개방식 작품의 5회차의 평점참여인원', 
-        '긍정댓글수', '조회수', '평점참여인원', 
-        '정식승격 작품의 회차별 긍정댓글수 평균', '정식승격 작품의 회차별 조회수 평균', '정식승격 작품의 회차별 평점참여인원 평균',
-        '동일 전개방식 작품의 긍정댓글수 평균', '동일 전개방식 작품의 조회수 평균', '동일 전개방식 작품의 평점참여인원 평균',
-        '댓글수', '댓글 작성자', 
-        '긍정 키워드1', '긍정 키워드2', '긍정 키워드3', 
-        '부정 키워드1', '부정 키워드2', '부정 키워드3', 
-        '승격여부', 
-        'first_positive_5_story', 'second_view_1_story', 'third_rating_people_5_story', 
-        'positive_story', 'view_story', 'rating_people_story', 
-        'first_positive_5_omnibus', 'second_view_1_omnibus', 
-        'third_rating_people_5_omnibus', 'positive_omnibus', 
-        'view_omnibus', 'rating_people_omnibus']
-
-        let userlabelforchart = [[],[],[],[],
-            ['5회차 긍정댓글수'], ['1회차 조회수'], ['5회차 평점참여인원'], 
-            ['정식승격 작품의','5회차 긍정댓글수 평균'], ['정식승격 작품','1회차 조회수 평균'],['정식승격 작품의','5회차 평점참여인원 평균'], 
-            ['동일 전개방식 작품의','5회차의 긍정댓글수'],['동일 전개방식 작품의','1회차의 조회수'], ['동일 전개방식 작품의','5회차의 평점참여인원'], 
-            ['긍정댓글 수'], ['조회수'], ['평점참여인원'], 
-            ['정식승격 작품의','긍정댓글수 평균'], ['정식승격 작품의','조회수 평균'], ['정식승격 작품의','5회차 평점참여인원 평균'],
-            ['동일 전개방식 작품의','긍정댓글수 평균'], ['동일 전개방식 작품의','조회수 평균'], ['동일 전개방식 작품의','평점참여인원 평균']
-        ]
-
-        const nfeatures = [
+        let userLabel = ['id', 'title', '5회차승격확률', '10회차확률', 
         'first_positive_5', 'second_view_1','third_rating_people_5', 
-        'first_positive_5_1', 'second_view_1_1',
-        'third_rating_people_5_1', 'first_positive_5_episode',
-        'second_view_1_episode', 'third_rating_people_5_episode', 'positive',
-        'view', 'rating_people', 'positive_1', 'view_1', 'rating_people_1',
-        'positive_episode', 'view_episode', 'rating_people_episode',
-        'comment_writer_count', 'first_positive_5_story',
-        'second_view_1_story', 'third_rating_people_5_story', 'positive_story',
-        'view_story', 'rating_people_story', 'first_positive_5_omnibus',
-        'second_view_1_omnibus', 'third_rating_people_5_omnibus',
-        'positive_omnibus', 'view_omnibus', 'rating_people_omnibus'
-        ]
+        'first_positive_5_1', 'second_view_1_1','third_rating_people_5_1', 
+        'first_positive_5_story','second_view_1_story', 'third_rating_people_5_story', 
+        '긍정댓글수','조회수', '평점참여자', 
+        '긍정댓글수 전체평균', '조회수 전체평균', '평점참여자 전체평균',
+        'positive_story', 'view_story', 'rating_people_story',
+        '댓글수', '댓글작성자', 
+        '긍정키워드1', '긍정키워드2', '긍정키워드3', 
+        '부정키워드1', '부정키워드2', '부정키워드3', '승격여부']
 
         const readCsv = (path) => {
             let arcnt = 0
             dfd.read_csv(path)
             .then(df => {
-                eval('newdf'+' =df.groupby(["id"])')
-                
                 ar = df.values
-                lastdataDf = newdf.get_groups([lastData]).values
-                arcnt = Array.from({length:lastdataDf.length}, (v,i)=>i+1+'회')
+                armax = df.max().data
+                armin = df.min().data
+                arcnt = Array.from({length:ar.length}, (v,i)=>i+1+'회')
+                // aridIndex   = arids.indexOf(lastData)
+                // aridIndex   = arids.indexOf(15067)
+                // eval('gbId_'+ar.at(aridIndex).at(0)+' = df.groupby(["id"]).get_groups(['+ar.at(aridIndex).at(0)+']).values')
                 
-                arids                         = Array.from(lastdataDf, x => x.at(0))
-                artitle                       = Array.from(lastdataDf, x => x.at(1))
-                promote5                      = Math.round(lastdataDf.at(0).at(2))
-                promote10                     = Math.round(lastdataDf.at(0).at(3))
-                promote5                      = Math.ceil(lastdataDf.at(0).at(2)*100)
-                promote10                     = Math.ceil(lastdataDf.at(0).at(3)*100)
-                
-                first_positive_5              = Array.from(lastdataDf, x => x.at(4))
-                second_view_1                 = Array.from(lastdataDf, x => x.at(5))
-                third_rating_people_5         = Array.from(lastdataDf, x => x.at(6))
+                arids            = Array.from(ar, x => x.at(0))
+                artitle          = Array.from(ar, x => x.at(1))
+                promote5         = Math.round(ar.at(0).at(2))
+                promote10        = Math.round(ar.at(0).at(3))
+                promote5         = Math.ceil(ar.at(0).at(2)*100)
+                promote10        = Math.ceil(ar.at(0).at(3)*100)
+                arPositive       = Array.from(ar, x => x.at(13))
+                arView           = Array.from(ar, x => x.at(14))
+                arRating         = Array.from(ar, x => x.at(15))
+                arPositiveTotal  = Array.from(ar, x => x.at(16))
+                arViewTotal      = Array.from(ar, x => x.at(17))
+                arRatingTotal    = Array.from(ar, x => x.at(18))
 
-                first_positive_5_1            = Math.ceil(lastdataDf.at(0).at(7))
-                second_view_1_1               = Math.ceil(lastdataDf.at(0).at(8))
-                third_rating_people_5_1       = Math.ceil(lastdataDf.at(0).at(9))
-
-                arPositive                    = Array.from(lastdataDf, x => Math.ceil(x.at(13)))
-                arView                        = Array.from(lastdataDf, x => Math.ceil(x.at(14)))
-                arRating                      = Array.from(lastdataDf, x => Math.ceil(x.at(15)))
-
-                arPositiveTotal               = Array.from(lastdataDf, x => Math.ceil(x.at(16)))
-                arViewTotal                   = Array.from(lastdataDf, x => Math.ceil(x.at(17)))
-                arRatingTotal                 = Array.from(lastdataDf, x => Math.ceil(x.at(18)))
-
-                if (ar.at(0).at(10) != NaN) {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(10))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(11))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(12))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(19))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(20))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(21))
-                } else if (ar.at(0).at(31) != NaN) {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(31))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(32))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(33))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(34))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(35))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(36))
-                } else if (ar.at(0).at(37) != NaN) {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(37))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(38))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(39))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(40))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(41))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(42))
-                }
-
-                
-                armax = new Array
-                armin = new Array
-                armax.push(Math.max.apply(null, first_positive_5))
-                armax.push(Math.max.apply(null, second_view_1))
-                armax.push(Math.max.apply(null, third_rating_people_5))
-
-                armax.push(Math.max.apply(null, arPositive))
-                armax.push(Math.max.apply(null, arView))
-                armax.push(Math.max.apply(null, arRating))
-
-                armax.push(Math.max.apply(null, arPositiveTotal))
-                armax.push(Math.max.apply(null, arViewTotal))
-                armax.push(Math.max.apply(null, arRatingTotal))
-
-                armin.push(Math.min.apply(null, first_positive_5))
-                armin.push(Math.min.apply(null, second_view_1))
-                armin.push(Math.min.apply(null, third_rating_people_5))
-                armin.push(Math.min.apply(null, arPositive))
-                armin.push(Math.min.apply(null, arView))
-                armin.push(Math.min.apply(null, arRating))
-                armin.push(Math.min.apply(null, arPositiveTotal))
-                armin.push(Math.min.apply(null, arViewTotal))
-                armin.push(Math.min.apply(null, arRatingTotal))
-                console.log(armax)
-                
-                for(let j=0;j<lastdataDf.length;j++){
-
-                    if (Math.ceil(lastdataDf.at(j).at(13)) === Math.ceil(armax.at(3))) {
+                for(let j=0;j<ar.length;j++){
+                    if (ar.at(j).at(13) === Math.round(armax.at(13) * 100)/100) {
                         maxindex3 = j // max index
                     } 
-                    if (Math.ceil(lastdataDf.at(j).at(14)) === Math.ceil(armax.at(4))) {
+                    if (ar.at(j).at(14) === Math.round(armax.at(14) * 100)/100){
                         maxindex4 = j // max index
                     }
-                    if (Math.ceil(lastdataDf.at(j).at(15)) === Math.ceil(armax.at(5))) {
+                    if (ar.at(j).at(15) === Math.round(armax.at(15) * 100)/100){
                         maxindex5 = j // max index
                     }
                     
-                    if (Math.ceil(lastdataDf.at(j).at(13)) === Math.ceil(armin.at(3))) {
+                    if (ar.at(j).at(13) === Math.round(armin.at(13) * 100)/100) {
                         minindex3 = j // max index
                     } 
-                    if (Math.ceil(lastdataDf.at(j).at(14)) === Math.ceil(armin.at(4))){
+                    if (ar.at(j).at(14) === Math.round(armin.at(14) * 100)/100){
                         minindex4 = j // max index
                     }
-                    if (Math.ceil(lastdataDf.at(j).at(15)) === Math.ceil(armin.at(5))){
+                    if (ar.at(j).at(15) === Math.round(armin.at(15) * 100)/100){
                         minindex5 = j // max index
                     }
                 }
                 
-                console.log(maxindex3, maxindex4,maxindex5)
+
                 let circleSize = 10
-                let pointRadius3 = Array.from({length:lastdataDf.length}, (i)=>3)
-                let pointRadius4 = Array.from({length:lastdataDf.length}, (i)=>3)
-                let pointRadius5 = Array.from({length:lastdataDf.length}, (i)=>3)
+                let pointRadius3 = Array.from({length:ar.length}, (i)=>3)
+                let pointRadius4 = Array.from({length:ar.length}, (i)=>3)
+                let pointRadius5 = Array.from({length:ar.length}, (i)=>3)
                 pointRadius3 = pointRadius3.fill(circleSize,maxindex3,maxindex3+1)
                 pointRadius4 = pointRadius4.fill(circleSize,maxindex4,maxindex4+1)
                 pointRadius5 = pointRadius5.fill(circleSize,maxindex5,maxindex5+1)
@@ -254,15 +166,15 @@
                 
                 // styling 
                 const bgcolor = ['#00800050', '#ff0000','#fff000']
-                let bgcolorOpacity3 = Array.from({length:lastdataDf.length}, (i)=>bgcolor.at(1))
+                let bgcolorOpacity3 = Array.from({length:ar.length}, (i)=>bgcolor.at(1))
                 bgcolorOpacity3 = bgcolorOpacity3.fill(bgcolor.at(1)+'50',maxindex3,maxindex3+1)
                 bgcolorOpacity3 = bgcolorOpacity3.fill(bgcolor.at(1)+'50',minindex3,minindex3+1)
     
-                let bgcolorOpacity4 = Array.from({length:lastdataDf.length}, (i)=>bgcolor.at(0))
+                let bgcolorOpacity4 = Array.from({length:ar.length}, (i)=>bgcolor.at(0))
                 bgcolorOpacity4 = bgcolorOpacity4.fill(bgcolor.at(0),maxindex4,maxindex4+1)
                 bgcolorOpacity4 = bgcolorOpacity4.fill(bgcolor.at(0),minindex4,minindex4+1)
 
-                let bgcolorOpacity5 = Array.from({length:lastdataDf.length}, (i)=>bgcolor.at(2))
+                let bgcolorOpacity5 = Array.from({length:ar.length}, (i)=>bgcolor.at(2))
                 bgcolorOpacity5 = bgcolorOpacity5.fill(bgcolor.at(2)+'50',maxindex5,maxindex5+1)
                 bgcolorOpacity5 = bgcolorOpacity5.fill(bgcolor.at(2)+'50',minindex5,minindex5+1)
     
@@ -386,61 +298,34 @@
                 });
             }).then(function(){
                 let comment_target = document.getElementById('data3_analysis')
-                let comment_target2 = document.getElementById('data3_title')
                 let comments = ''
-                let comments1 = ''
-                let comments2 = ''
-                comments += '<div class="item"><span>[' + artitle[0] +'] ' + userLabel.at(13) + '</span><span>'
-                comments1 += '<div class="item"><span>' + userLabel.at(16)  + '</span><span>'
-                comments += ((Math.round(armax.at(3)) * 100)/100) + '개</em></span></div>'
-                comments1 += ((Math.round(armax.at(6)) * 100)/100) + '개</em></span></div>'
-                if ((((Math.round(armax.at(6)) - Math.round(armax.at(3))) * 100)/100)<0) {
-                    comments1 += '<div>최고 '+ userLabel.at(13) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'high' + '">' + Math.abs(((Math.round(armax.at(3)) - Math.round(armax.at(6))) * 100)/100) + '개</em> 높습니다.</div>'
+                comments += '선택하신 [' + artitle[0] +'] 의 ' + userLabel.at(13) + ', 그리고 ' + userLabel.at(16) + ' 지표를 비교한 결과 '
+                if ((((Math.round(armax.at(16)) - Math.round(armax.at(13))) * 100)/100)<0) {
+                    comments += '최고 '+ userLabel.at(13) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'high' + '">' + (((Math.round(armax.at(13)) - Math.round(armax.at(16))) * 100)/100) + '개</em> 높습니다.'
                 } else {
-                    comments1 += '<div>최고 '+ userLabel.at(13) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'low' + '">' + Math.abs(((Math.round(armax.at(6)) - Math.round(armax.at(3))) * 100)/100) + '개</em> 낮습니다.</div>'
+                    comments += '최고 '+ userLabel.at(13) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'low' + '">' + (((Math.round(armax.at(16)) - Math.round(armax.at(13))) * 100)/100) + '개</em> 낮습니다.'
                 }
-                comments2 += userLabel.at(13) + '에 대한 분석'
-                comments += comments1
                 comment_target.innerHTML = comments
-                comment_target2.innerHTML = comments2
             }).then(function(){
                 let comment_target = document.getElementById('data4_analysis')
-                let comment_target2 = document.getElementById('data4_title')
                 let comments = ''
-                let comments1 = ''
-                let comments2 = ''
-                comments += '<div class="item"><span>[' + artitle[0] +'] ' + userLabel.at(14) + '</span><span>'
-                comments1 += '<div class="item"><span>' + userLabel.at(17)  + '</span><span>'
-                comments += ((Math.round(armax.at(4)) * 100)/100) + '개</em></span></div>'
-                comments1 += ((Math.round(armax.at(7)) * 100)/100) + '개</em></span></div>'
-                if ((((Math.round(armax.at(7)) - Math.round(armax.at(4))) * 100)/100)<0) {
-                    comments1 += '<div>최고 '+ userLabel.at(14) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'high' + '">' + Math.abs(((Math.round(armax.at(4)) - Math.round(armax.at(7))) * 100)/100) + '회</em> 높습니다.</div>'
+                comments += '선택하신 [' + artitle[0] +'] 의 ' + userLabel.at(14) + ', 그리고 ' + userLabel.at(17) + ' 지표를 분석한 결과 '
+                if ((((Math.round(armax.at(17)) - Math.round(armax.at(14))) * 100)/100)<0) {
+                    comments += '최고 '+ userLabel.at(14) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'high' + '">' + (((Math.round(armax.at(14)) - Math.round(armax.at(17))) * 100)/100) + '회</em> 높습니다.'
                 } else {
-                    comments1 += '<div>최고 '+ userLabel.at(14) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'low' + '">' + Math.abs(((Math.round(armax.at(7)) - Math.round(armax.at(4))) * 100)/100) + '회</em> 적습니다.</div>'
+                    comments += '최고 '+ userLabel.at(14) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'low' + '">' + (((Math.round(armax.at(17)) - Math.round(armax.at(14))) * 100)/100) + '회</em> 낮습니다.'
                 }
-                comments2 += userLabel.at(14) + '에 대한 분석'
-                comments += comments1
                 comment_target.innerHTML = comments
-                comment_target2.innerHTML = comments2
             }).then(function(){
                 let comment_target = document.getElementById('data5_analysis')
-                let comment_target2 = document.getElementById('data5_title')
                 let comments = ''
-                let comments1 = ''
-                let comments2 = ''
-                comments += '<div class="item"><span>[' + artitle[0] +'] ' + userLabel.at(15) + '</span><span>'
-                comments1 += '<div class="item"><span>' + userLabel.at(18)  + '</span><span>'
-                comments += ((Math.round(armax.at(5)) * 100)/100) + '개</em></span></div>'
-                comments1 += ((Math.round(armax.at(8)) * 100)/100) + '개</em></span></div>'
-                if ((((Math.round(armax.at(5)) - Math.round(armax.at(5))) * 100)/100)<0) {
-                    comments1 += '<div>최고 '+ userLabel.at(15) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'high' + '">' + Math.abs(((Math.round(armax.at(5)) - Math.round(armax.at(8))) * 100)/100) + '명</em> 높습니다.</div>'
+                comments += '선택하신 [' + artitle[0] +'] 의 ' + userLabel.at(15) + ', 그리고 ' + userLabel.at(18) + ' 지표를 분석한 결과 '
+                if ((((Math.round(armax.at(18)) - Math.round(armax.at(15))) * 100)/100)<0) {
+                    comments += '최고 '+ userLabel.at(15) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'high' + '">' + (((Math.round(armax.at(15)) - Math.round(armax.at(18))) * 100)/100) + '명</em> 높습니다.'
                 } else {
-                    comments1 += '<div>최고 '+ userLabel.at(15) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'low' + '">' + Math.abs(((Math.round(armax.at(8)) - Math.round(armax.at(5))) * 100)/100) + '명</em> 적습니다.</div>'
+                    comments += '최고 '+ userLabel.at(15) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'low' + '">' + (((Math.round(armax.at(18)) - Math.round(armax.at(15))) * 100)/100) + '명</em> 낮습니다.'
                 }
-                comments2 += userLabel.at(15) + '에 대한 분석'
-                comments += comments1
                 comment_target.innerHTML = comments
-                comment_target2.innerHTML = comments2
             }).catch(err => {
                 console.log(err);
             })
