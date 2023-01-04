@@ -282,6 +282,7 @@ em {
     bottom: -5%;
     width: 120vw;
     opacity: 0.5;
+    z-index: -1;
 }
 
 .main_search h1 {
@@ -297,6 +298,7 @@ em {
     min-width: 80px;
     max-width: 300px;
     box-sizing: border-box;
+    background-color: #fff;
 }
 
 .main_search .search_bar {
