@@ -45,6 +45,14 @@ ol, ul, li {
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'KyoboHandwriting2020A';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/KyoboHandwriting2020A.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 
 
 
@@ -60,6 +68,10 @@ ol, ul, li {
     font-family: 'KyoboHandwriting2021sjy';
 }
 
+.f4 {
+    font-family: 'KyoboHandwriting2020A';
+}
+
 em {
     font-style: normal;
 }
@@ -67,6 +79,7 @@ em {
 .hlight {
     /* color: #00d364; */
     color: #1b864d;
+    font-weight: bold;
 }
 
 /* contents */
@@ -294,6 +307,11 @@ em {
     flex-shrink: 0;
 }
 
+.main_search .sub {
+    color: #999;
+    font-size: 14px;
+}
+
 .main_search .title_img {
     width: 20%;
     min-width: 150px;
@@ -317,7 +335,7 @@ em {
 
 .main_search .search_area {
     border: 1px solid #ccc;
-    padding: 12px 16px;
+    padding: 12px 13px;
     padding-right: 8px;
     width: 80%;
     min-width: 80px;
@@ -326,6 +344,7 @@ em {
     background-color: #fff;
     border-radius: 6px;
     display: flex;
+    font-size: 18px;
 }
 
 .main_search .searchbar {
@@ -338,6 +357,7 @@ em {
     background-color: #fff;
     outline: none;
     flex: 1 0 auto;
+    font-size: 15px;
 }
 
 .main_search .searchbar [type='submit'] {
@@ -368,5 +388,63 @@ em {
     width: 100%;
 }
 
+.go_last {
+    height: 40px;
+    background-color: #00d364;
+    color: #fff;
+    padding: 18px 0;
+    text-align: center;
+    font-weight: bold;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
 
+.myeong {
+    font-style: italic;
+    text-align: center;
+    padding: 16px 25px;
+    margin: 0 0 20px;
+    background-color: #f4f4f4;
+    position: relative;
+    border-radius: 10px;
+    color: #888;
+}
 
+.last_wrap {
+    padding: 20px 16px;
+}
+
+.last_wrap .from {
+    text-align: center;
+}
+
+.last_wrap .goback {
+
+}
+
+.nodata {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.nodata p {
+    font-size: 40px;
+    margin-top: -30px;
+}
+
+.nodata .goback {
+    width: calc(100% - 32px);
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: #e3f9ed;
+    color: #1b864d;
+    text-align: center;
+    border-radius: 6px;
+}
