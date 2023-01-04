@@ -72,12 +72,17 @@
         </div>
     </div>
     <script>
-        let lastData
+        let lastData, readfile
         if(localStorage.getItem('id')){
+            // result1 591250
+            // result2 714582
+            // result3 803047
             lastData = localStorage.getItem('id')
+            readfile = (Number(lastData)>591250) ? 'result2.csv' : 
+            (Number(lastData)>714582) ? 'result3.csv' : 'result1.csv'
         }
         let gbId, gbLabel
-        let ar, armax, armin, artitle, arlabel, arcmmtcnt, promote5, promote10
+        let ar, armax, armin, aridIndex, artitle, arlabel, arcmmtcnt, promote5, promote10
         let arPositive, arView, arRating
         let first_positive_5, second_view_1, third_rating_people_5
         let first_positive_5_1, second_view_1_1, third_rating_people_5_1
@@ -88,31 +93,45 @@
         let maxindex3, maxindex4, maxindex5
         let minindex3, minindex4, minindex5
         // labels 
-        let dataLabel = ['id', 'title', '5th', '10th', 
+        const dataLabel = ['id', 'title', '5th', '10th', 
         'first_positive_5', 'second_view_1','third_rating_people_5', 
-        'first_positive_5_1', 'second_view_1_1','third_rating_people_5_1', 
-        'first_positive_5_story','second_view_1_story', 'third_rating_people_5_story', 
-        'positive','view', 'rating_people', 
-        'positive_1', 'view_1', 'rating_people_1',
-        'positive_story', 'view_story', 'rating_people_story',
-        'comment_writer_count', 'comment_writer', 
-        'pos_keyword_1', 'pos_keyword_2', 'pos_keyword_3', 
-        'neg_keyword_1', 'neg_keyword_2', 'neg_keyword_3', 'label']
-        let userLabel = ['id', 'title', '5회차승격확률', '10회차확률', 
-        '5회의 긍정댓글 수', '1회의 조회수','5회의 평가자 수', 
-        '5회의 긍정댓글 수 전체평균', '1회의 조회수 전체평균','5회의 평가자 수 전체평균', 
-        '5회의 긍정댓글 수 장르평균','1회의 조회수 장르평균', '5회의 평가자 수 장르평균', 
-        '긍정댓글수','조회수', '평점참여자', 
-        '긍정댓글수 전체평균', '조회수 전체평균', '평점참여자 전체평균',
-        'positive_story', 'view_story', 'rating_people_story',
-        '댓글수', '댓글작성자', 
-        '긍정키워드1', '긍정키워드2', '긍정키워드3', 
-        '부정키워드1', '부정키워드2', '부정키워드3', '승격여부']
+        'first_positive_5_1', 'second_view_1_1',
+        'third_rating_people_5_1', 'first_positive_5_episode',
+        'second_view_1_episode', 'third_rating_people_5_episode', 'positive',
+        'view', 'rating_people', 'positive_1', 'view_1', 'rating_people_1',
+        'positive_episode', 'view_episode', 'rating_people_episode',
+        'comment_writer_count', 'comment_writer', 'pos_keyword_1',
+        'pos_keyword_2', 'pos_keyword_3', 'neg_keyword_1', 'neg_keyword_2',
+        'neg_keyword_3', 'label', 'first_positive_5_story',
+        'second_view_1_story', 'third_rating_people_5_story', 'positive_story',
+        'view_story', 'rating_people_story', 'first_positive_5_omnibus',
+        'second_view_1_omnibus', 'third_rating_people_5_omnibus',
+        'positive_omnibus', 'view_omnibus', 'rating_people_omnibus']
 
-        let userlabelforchart = [
-            ['5회차의 긍정적인 댓글 수'], ['1회차의 조회수'], ['5회차의 평가자 수'], 
-            ['5회차의 긍정적인 댓글 수 전체평균'], ['1회차의 조회수 전체평균'], ['5회차의 평가자 수 전체평균'], 
-            ['5회차의 동일 전개방식의 정식연재 성공작 평균 긍정적인 댓글 수'], ['1회차의 동일 전개방식의 정식연재 성공작 평균 조회수'], ['5회차의 동일 전개방식의 정식연재 성공작 평균 평가자 수']
+        const userLabel = ['id', '제목', '5회차 기준 승격확률', '10회차 기준 승격확률', 
+        '5회차 긍정댓글수', '1회차 조회수', '5회차 평점참여인원', 
+        '정식승격 작품의 5회차 긍정댓글수 평균', '정식승격 작품의 1회차 조회수 평균','정식승격 작품의 5회차 평점참여인원 평균', 
+        '동일 전개방식 작품의 5회차의 긍정댓글수','동일 전개방식 작품의 1회차의 조회수', '동일 전개방식 작품의 5회차의 평점참여인원', 
+        '긍정댓글수', '조회수', '평점참여인원', 
+        '정식승격 작품의 긍정댓글수 평균', '정식승격 작품의 조회수 평균', '정식승격 작품의 5회차 평점참여인원 평균',
+        '동일 전개방식 작품의 긍정댓글수 평균', '동일 전개방식 작품의 조회수 평균', '동일 전개방식 작품의 평점참여인원 평균',
+        '댓글수', '댓글 작성자', 
+        '긍정 키워드1', '긍정 키워드2', '긍정 키워드3', 
+        '부정 키워드1', '부정 키워드2', '부정 키워드3', 
+        '승격여부', 
+        'first_positive_5_story', 'second_view_1_story', 'third_rating_people_5_story', 
+        'positive_story', 'view_story', 'rating_people_story', 
+        'first_positive_5_omnibus', 'second_view_1_omnibus', 
+        'third_rating_people_5_omnibus', 'positive_omnibus', 
+        'view_omnibus', 'rating_people_omnibus']
+
+        let userlabelforchart = [[],[],[],[],
+            ['5회차 긍정댓글수'], ['1회차 조회수'], ['5회차 평점참여인원'], 
+            ['정식승격 작품의','5회차 긍정댓글수 평균'], ['정식승격 작품','1회차 조회수 평균'],['정식승격 작품의','5회차 평점참여인원 평균'], 
+            ['동일 전개방식 작품의','5회차의 긍정댓글수'],['동일 전개방식 작품의','1회차의 조회수'], ['동일 전개방식 작품의','5회차의 평점참여인원'], 
+            ['긍정댓글 수'], ['조회수'], ['평점참여인원'], 
+            ['정식승격 작품의','긍정댓글수 평균'], ['정식승격 작품의','조회수 평균'], ['정식승격 작품의','5회차 평점참여인원 평균'],
+            ['동일 전개방식 작품의','긍정댓글수 평균'], ['동일 전개방식 작품의','조회수 평균'], ['동일 전개방식 작품의','평점참여인원 평균']
         ]
 
         const readCsv = (path) => {
@@ -123,9 +142,9 @@
                 armax = df.max().data
                 armin = df.min().data
                 arcnt = Array.from({length:ar.length}, (v,i)=>i+1+'회')
-                // aridIndex   = arids.indexOf(lastData)
-                // aridIndex   = arids.indexOf(15067)
-                // eval('gbId_'+ar.at(aridIndex).at(0)+' = df.groupby(["id"]).get_groups(['+ar.at(aridIndex).at(0)+']).values')
+                // eval('gbId_'+ String(lastData) +' = df.groupby(["id"]).get_groups(['+df.columns+']).values')
+                // eval('gbId_'+' = df.groupby(["id"]).get_groups(['+df.columns+']).values')
+                eval('lastdataDf'+' =df.groupby(["id"]).get_groups(['+lastData+']).values')
                 
                 arids                         = Array.from(ar, x => x.at(0))
                 artitle                       = Array.from(ar, x => x.at(1))
@@ -133,25 +152,48 @@
                 promote10                     = Math.round(ar.at(0).at(3))
                 promote5                      = Math.ceil(ar.at(0).at(2)*100)
                 promote10                     = Math.ceil(ar.at(0).at(3)*100)
-                first_positive_5              = ar.at(0).at(4)
-                second_view_1                 = ar.at(0).at(5)
-                third_rating_people_5         = ar.at(0).at(6)
+                
+                first_positive_5              = Array.from(ar, x => x.at(4))
+                second_view_1                 = Array.from(ar, x => x.at(5))
+                third_rating_people_5         = Array.from(ar, x => x.at(6))
+
                 first_positive_5_1            = Math.ceil(ar.at(0).at(7))
                 second_view_1_1               = Math.ceil(ar.at(0).at(8))
                 third_rating_people_5_1       = Math.ceil(ar.at(0).at(9))
-                first_positive_5_genre        = Math.ceil(ar.at(0).at(10))
-                second_view_1_genre           = Math.ceil(ar.at(0).at(11))
-                third_rating_people_5_genre   = Math.ceil(ar.at(0).at(12))
+
                 arPositive                    = Array.from(ar, x => x.at(13))
                 arView                        = Array.from(ar, x => x.at(14))
                 arRating                      = Array.from(ar, x => x.at(15))
-                arPositiveTotal               = Array.from(ar, x => x.at(16))
-                arViewTotal                   = Array.from(ar, x => x.at(17))
-                arRatingTotal                 = Array.from(ar, x => x.at(18))
+                arPositiveTotal               = Math.ceil(ar.at(0).at(16))
+                arViewTotal                   = Math.ceil(ar.at(0).at(17))
+                arRatingTotal                 = Math.ceil(ar.at(0).at(18))
 
-                console.log(first_positive_5)
-                console.log(first_positive_5_1)
-                console.log(first_positive_5_genre)
+                if (ar.at(0).at(10) != NaN) {
+                    first_positive_5_genre        = Math.ceil(ar.at(0).at(10))
+                    second_view_1_genre           = Math.ceil(ar.at(0).at(11))
+                    third_rating_people_5_genre   = Math.ceil(ar.at(0).at(12))
+                    positive_genre                = Math.ceil(ar.at(0).at(19))
+                    view_genre                    = Math.ceil(ar.at(0).at(20))
+                    rating_people_genre           = Math.ceil(ar.at(0).at(21))
+                } else if (ar.at(0).at(31) != NaN) {
+                    first_positive_5_genre        = Math.ceil(ar.at(0).at(31))
+                    second_view_1_genre           = Math.ceil(ar.at(0).at(32))
+                    third_rating_people_5_genre   = Math.ceil(ar.at(0).at(33))
+                    positive_genre                = Math.ceil(ar.at(0).at(34))
+                    view_genre                    = Math.ceil(ar.at(0).at(35))
+                    rating_people_genre           = Math.ceil(ar.at(0).at(36))
+                } else if (ar.at(0).at(37) != NaN) {
+                    first_positive_5_genre        = Math.ceil(ar.at(0).at(37))
+                    second_view_1_genre           = Math.ceil(ar.at(0).at(38))
+                    third_rating_people_5_genre   = Math.ceil(ar.at(0).at(39))
+                    positive_genre                = Math.ceil(ar.at(0).at(40))
+                    view_genre                    = Math.ceil(ar.at(0).at(41))
+                    rating_people_genre           = Math.ceil(ar.at(0).at(42))
+                }
+
+                console.log(df.columns)
+                // console.log(first_positive_5_1)
+                // console.log(first_positive_5_genre)
 
                 for(let j=0;j<ar.length;j++){
                     if (ar.at(j).at(13) === Math.round(armax.at(13) * 100)/100) {
@@ -190,11 +232,11 @@
                 let comments2 = ''
                 let comments3 = userLabel.at(13)
                 if ((((Math.round(armax.at(16)) - Math.round(armax.at(13))) * 100)/100)<0) {
-                    comments1 += (((Math.round(armax.at(13)) - Math.round(armax.at(16))) * 100)/100)
-                    comments2 += '개 <em class="high">높음</em>'
+                    comments1 += '다른 작품보다 '+ (((Math.round(armax.at(13)) - Math.round(armax.at(16))) * 100)/100)
+                    comments2 += '개 <em class="high">많아요!</em>'
                 } else {
                     comments1 += (((Math.round(armax.at(16)) - Math.round(armax.at(13))) * 100)/100)
-                    comments2 += '개 <em class="low">낮음</em>'
+                    comments2 += '개 <em class="low">적어요.</em>'
                 }
                 comment_target1.innerHTML = comments1
                 comment_target2.innerHTML = comments2
@@ -207,11 +249,11 @@
                 let comments2 = ''
                 let comments3 = userLabel.at(14)
                 if ((((Math.round(armax.at(17)) - Math.round(armax.at(14))) * 100)/100)<0) {
-                    comments1 += (((Math.round(armax.at(14)) - Math.round(armax.at(17))) * 100)/100)
-                    comments2 += '회 <em class="high">높음</em>'
+                    comments1 += '다른 작품보다 '+ (((Math.round(armax.at(14)) - Math.round(armax.at(17))) * 100)/100)
+                    comments2 += '회 <em class="high">많아요!</em>'
                 } else {
                     comments1 += (((Math.round(armax.at(17)) - Math.round(armax.at(14))) * 100)/100)
-                    comments2 += '회 <em class="low">낮음</em>'
+                    comments2 += '회 <em class="low">적어요.</em>'
                 }
                 comment_target1.innerHTML = comments1
                 comment_target2.innerHTML = comments2
@@ -224,11 +266,11 @@
                 let comments2 = ''
                 let comments3 = userLabel.at(15)
                 if ((((Math.round(armax.at(18)) - Math.round(armax.at(15))) * 100)/100)<0) {
-                    comments1 += (((Math.round(armax.at(15)) - Math.round(armax.at(18))) * 100)/100)
-                    comments2 += '명 <em class="high">높음</em>'
+                    comments1 += '다른 작품보다 '+ (((Math.round(armax.at(15)) - Math.round(armax.at(18))) * 100)/100)
+                    comments2 += '명 <em class="high">많아요!</em>'
                 } else {
                     comments1 += (((Math.round(armax.at(18)) - Math.round(armax.at(15))) * 100)/100)
-                    comments2 += '명 <em class="low">낮음</em>'
+                    comments2 += '명 <em class="low">적어요.</em>'
                 }
                 comment_target1.innerHTML = comments1
                 comment_target2.innerHTML = comments2
@@ -268,7 +310,7 @@
                 const ctx3 = document.getElementById('myChart3');
 
                 const data1 = {
-                    labels: [userLabel[4],userLabel[7],userLabel[10]],
+                    labels: [userlabelforchart[4],userlabelforchart[7],userlabelforchart[10]],
                     datasets: [
                         {
                             data: [first_positive_5, first_positive_5_1, first_positive_5_genre],
@@ -282,7 +324,7 @@
                 console.log(first_positive_5_1)
 
                 const data2 = {
-                    labels: [userLabel[5],userLabel[8],userLabel[11]],
+                    labels: [userlabelforchart[5],userlabelforchart[8],userlabelforchart[11]],
                     datasets: [
                         {
                             data: [second_view_1, second_view_1_1, second_view_1_genre],
@@ -295,7 +337,7 @@
                 }
 
                 const data3 = {
-                    labels: [userLabel[6],userLabel[9],userLabel[12]],
+                    labels: [userlabelforchart[6],userlabelforchart[9],userlabelforchart[12]],
                     datasets: [
                         {
                             data: [third_rating_people_5, third_rating_people_5_1, third_rating_people_5_genre],
@@ -350,9 +392,9 @@
                 console.log(err);
             })
         }
-        readCsv("../data/total/id_"+lastData+'.csv')
+        readCsv("../data/total/" + readfile)
         localStorage.setItem('id',lastData)
-        console.log('현재 실행 중 파일은 '+'id_'+lastData+'csv'+'입니다.')
+        console.log('현재 실행 중 파일은 '+readfile+'이고 아이디는 '+lastData+'입니다.')
     </script>
 </body>
 </html>

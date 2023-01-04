@@ -64,9 +64,14 @@
         </div>
     </div>
     <script>
-        let lastData
+        let lastData, readfile
         if(localStorage.getItem('id')){
+            // result1 591250
+            // result2 714582
+            // result3 803047
             lastData = localStorage.getItem('id')
+            readfile =  (Number(lastData)>591250) ? 'result2.csv' : 
+            (Number(lastData)>714582) ? 'result3.csv' : 'result1.csv'
         }
         let gbId, gbLabel
         let ar, armax, armin, artitle, arlabel, arcmmtcnt
@@ -325,8 +330,9 @@
                 console.log(err);
             })
         }
-        readCsv("../data/total/id_"+lastData+".csv")
-        console.log('현재 실행 중 파일은 '+lastData+'입니다.')
+        readCsv("../data/total/" + readfile)
+        localStorage.setItem('id',lastData)
+        console.log('현재 실행 중 파일은 '+readfile+'이고 아이디는 '+lastData+'입니다.')
     </script>
 </body>
 </html>
