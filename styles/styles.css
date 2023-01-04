@@ -189,6 +189,10 @@ em {
     display: inline-block;
 }
 
+.summary_wrap > div + div {
+    margin-top: 80px;
+}
+
 .summary_list {
     font-size: 0;
 }
@@ -338,3 +342,6 @@ em {
 .dimmed img {
     width: 100%;
 }
+
+
+

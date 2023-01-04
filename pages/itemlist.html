@@ -78,8 +78,8 @@
                     let item = document.createElement('a')
                     item.id = 'id_'+newids.at(j)
                     item.className = 'item'
-                    // item.href = "javascript:void(0);"
-                    item.href = 'summary.html'
+                    item.href = "javascript:void(0);"
+                    // item.href = 'summary.html'
                     // item.href = '#'
 
                     let thumb = document.createElement('img')
@@ -144,13 +144,11 @@
         divElement.addEventListener('click', (e) => {
             let targetElement = e.target;
             clickedItem = targetElement.id 
-            // localStorage.setItem('id',15067)
             localStorage.setItem('id',clickedItem.substr(3))
-            // console.log(clickedItem.substr(3))
-            // Loading()
-            // setTimeout(() => {
-            //     hrefLink()
-            // }, 4000);
+            Loading()
+            setTimeout(() => {
+                hrefLink()
+            }, 4000);
         });
 
         readCsv("../data/total/"+'item_thumbnail.csv')

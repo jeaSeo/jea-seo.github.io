@@ -75,29 +75,29 @@
         let arNegKeyword1, arNegKeyword2, arNegKeyword3
         let maxindex3, maxindex4, maxindex5
         let minindex3, minindex4, minindex5
-        // labels 
-        let dataLabel = ['id', 'title', '5th', '10th', 'first_positive_5', 'second_view_1',
-       'third_rating_people_5', 'first_positive_5_mean', 'second_view_1_mean',
-       'third_rating_people_5_mean', 'positive', 'view', 'rating_people',
-       'positive_mean', 'view_mean', 'rating_people_mean',
-       'comment_writer_count', 'comment_writer', 'pos_keyword_1',
-       'pos_keyword_2', 'pos_keyword_3', 'neg_keyword_1', 'neg_keyword_2',
-       'neg_keyword_3', 'label']
 
-        let userLabel = ['id', 'title', '5회차승격확률', '10회차확률', 'first_positive_5', 'second_view_1',
-       'third_rating_people_5', 'first_positive_5_mean', 'second_view_1_mean',
-       'third_rating_people_5_mean', '긍정댓글수', '조회수', '평점참여자',
-       '긍정댓글수 전체평균', '조회수 전체평균', '평점참여자 전체평균',
-       'comment_writer_count', '독자', '긍정키워드1',
-       '긍정키워드2', '긍정키워드3', '부정키워드1', '부정키워드2',
-       '부정키워드3', '승격여부']
-       
-        // let dataLabel = ['id', 'title', 'thumbnail', 'view', 'rating', 'commentCount',
-        // 'commentKeyword', 'totalView', 'totalRate', 'totalCommentCount','genPer', 'totalPer']
-       
-        // let userLabel = ['id', '제목', '섬네일', '조회수', '평점', '댓글개수',
-        // '키워드1', '키워드2', '키워드3', '승격작 평균 조회수',
-        // '승격작 평균 평점', '승격작 평균 댓글수', '[장르]승격확률 평균', '[장르]전체 승격확률 평균']
+        // labels 
+        let dataLabel = ['id', 'title', '5th', '10th', 
+        'first_positive_5', 'second_view_1','third_rating_people_5', 
+        'first_positive_5_1', 'second_view_1_1','third_rating_people_5_1', 
+        'first_positive_5_story','second_view_1_story', 'third_rating_people_5_story', 
+        'positive','view', 'rating_people', 
+        'positive_1', 'view_1', 'rating_people_1',
+        'positive_story', 'view_story', 'rating_people_story',
+        'comment_writer_count', 'comment_writer', 
+        'pos_keyword_1', 'pos_keyword_2', 'pos_keyword_3', 
+        'neg_keyword_1', 'neg_keyword_2', 'neg_keyword_3', 'label']
+
+        let userLabel = ['id', 'title', '5회차승격확률', '10회차확률', 
+        'first_positive_5', 'second_view_1','third_rating_people_5', 
+        'first_positive_5_1', 'second_view_1_1','third_rating_people_5_1', 
+        'first_positive_5_story','second_view_1_story', 'third_rating_people_5_story', 
+        '긍정댓글수','조회수', '평점참여자', 
+        '긍정댓글수 전체평균', '조회수 전체평균', '평점참여자 전체평균',
+        'positive_story', 'view_story', 'rating_people_story',
+        '댓글수', '댓글작성자', 
+        '긍정키워드1', '긍정키워드2', '긍정키워드3', 
+        '부정키워드1', '부정키워드2', '부정키워드3', '승격여부']
 
         const readCsv = (path) => {
             let arcnt = 0
@@ -113,31 +113,35 @@
                 
                 arids            = Array.from(ar, x => x.at(0))
                 artitle          = Array.from(ar, x => x.at(1))
-                arPositive       = Array.from(ar, x => x.at(10))
-                arView           = Array.from(ar, x => x.at(11))
-                arRating         = Array.from(ar, x => x.at(12))
-                arPositiveTotal  = Array.from(ar, x => x.at(13))
-                arViewTotal      = Array.from(ar, x => x.at(14))
-                arRatingTotal    = Array.from(ar, x => x.at(15))
-                console.log(arViewTotal)
+                promote5         = Math.round(ar.at(0).at(2))
+                promote10        = Math.round(ar.at(0).at(3))
+                promote5         = Math.ceil(ar.at(0).at(2)*100)
+                promote10        = Math.ceil(ar.at(0).at(3)*100)
+                arPositive       = Array.from(ar, x => x.at(13))
+                arView           = Array.from(ar, x => x.at(14))
+                arRating         = Array.from(ar, x => x.at(15))
+                arPositiveTotal  = Array.from(ar, x => x.at(16))
+                arViewTotal      = Array.from(ar, x => x.at(17))
+                arRatingTotal    = Array.from(ar, x => x.at(18))
+
                 for(let j=0;j<ar.length;j++){
-                    if (ar.at(j).at(10) === Math.round(armax.at(10) * 100)/100) {
+                    if (ar.at(j).at(13) === Math.round(armax.at(13) * 100)/100) {
                         maxindex3 = j // max index
                     } 
-                    if (ar.at(j).at(11) === Math.round(armax.at(11) * 100)/100){
+                    if (ar.at(j).at(14) === Math.round(armax.at(14) * 100)/100){
                         maxindex4 = j // max index
                     }
-                    if (ar.at(j).at(12) === Math.round(armax.at(12) * 100)/100){
+                    if (ar.at(j).at(15) === Math.round(armax.at(15) * 100)/100){
                         maxindex5 = j // max index
                     }
                     
-                    if (ar.at(j).at(10) === Math.round(armin.at(10) * 100)/100) {
+                    if (ar.at(j).at(13) === Math.round(armin.at(13) * 100)/100) {
                         minindex3 = j // max index
                     } 
-                    if (ar.at(j).at(11) === Math.round(armin.at(11) * 100)/100){
+                    if (ar.at(j).at(14) === Math.round(armin.at(14) * 100)/100){
                         minindex4 = j // max index
                     }
-                    if (ar.at(j).at(12) === Math.round(armin.at(12) * 100)/100){
+                    if (ar.at(j).at(15) === Math.round(armin.at(15) * 100)/100){
                         minindex5 = j // max index
                     }
                 }
@@ -178,20 +182,18 @@
                     labels: arcnt,
                     datasets: [
                         {
-                            label: userLabel[10],
+                            label: userLabel[13],
                             data: arPositive,
                             borderColor: bgcolor.at(1),
                             backgroundColor: bgcolorOpacity3,
-                            // pointStyle: 'circle',
                             pointRadius: pointRadius3,
                             pointHoverRadius: 15
                         },
                         {
-                            label: userLabel[13],
+                            label: userLabel[16],
                             data: arPositiveTotal,
                             borderColor: 'lightgray',
                             backgroundColor: 'lightgray',
-                            // pointStyle: 'circle',
                             pointRadius: 2,
                             pointHoverRadius: 15
                         }
@@ -202,20 +204,18 @@
                     labels: arcnt,
                     datasets: [
                         {
-                            label: userLabel[11],
+                            label: userLabel[14],
                             data: arView,
                             borderColor: bgcolor.at(0),
                             backgroundColor: bgcolorOpacity4,
-                            // pointStyle: 'circle',
                             pointRadius: pointRadius4,
                             pointHoverRadius: 15
                         },
                         {
-                            label: userLabel[14],
+                            label: userLabel[17],
                             data: arViewTotal,
                             borderColor: 'lightgray',
                             backgroundColor: 'lightgray',
-                            // pointStyle: 'circle',
                             pointRadius: 2,
                             pointHoverRadius: 15
                         }
@@ -226,20 +226,18 @@
                     labels: arcnt,
                     datasets: [
                         {
-                            label: userLabel[12],
+                            label: userLabel[15],
                             data: arRating,
                             borderColor: bgcolor.at(2),
                             backgroundColor: bgcolorOpacity5,
-                            // pointStyle: 'circle',
                             pointRadius: pointRadius5,
                             pointHoverRadius: 15
                         },
                         {
-                            label: userLabel[15],
+                            label: userLabel[18],
                             data: arRatingTotal,
                             borderColor: 'lightgray',
                             backgroundColor: 'lightgray',
-                            // pointStyle: 'circle',
                             pointRadius: 1,
                             pointHoverRadius: 15
                         }
@@ -296,41 +294,37 @@
             }).then(function(){
                 let comment_target = document.getElementById('data3_analysis')
                 let comments = ''
-                comments += '선택하신 [' + artitle[0] +'] 의 ' + userLabel.at(10) + ', 그리고 ' + userLabel.at(13) + ' 지표를 비교한 결과 '
-                if ((((Math.round(armax.at(13)) - Math.round(armax.at(10))) * 100)/100)<0) {
-                    comments += '최고 '+ userLabel.at(10) + ' 기준 동일한 ' + '장르' + '의 평균에 대비해 약 ' + '<em class="' + 'high' + '">' + (((Math.round(armax.at(10)) - Math.round(armax.at(13))) * 100)/100) + '개</em> 높습니다.'
+                comments += '선택하신 [' + artitle[0] +'] 의 ' + userLabel.at(13) + ', 그리고 ' + userLabel.at(16) + ' 지표를 비교한 결과 '
+                if ((((Math.round(armax.at(16)) - Math.round(armax.at(13))) * 100)/100)<0) {
+                    comments += '최고 '+ userLabel.at(13) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'high' + '">' + (((Math.round(armax.at(13)) - Math.round(armax.at(16))) * 100)/100) + '개</em> 높습니다.'
                 } else {
-                    comments += '최고 '+ userLabel.at(10) + ' 기준 동일한 ' + '장르' + '의 평균에 대비해 약 ' + '<em class="' + 'low' + '">' + (((Math.round(armax.at(13)) - Math.round(armax.at(10))) * 100)/100) + '개</em> 낮습니다.'
+                    comments += '최고 '+ userLabel.at(13) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'low' + '">' + (((Math.round(armax.at(16)) - Math.round(armax.at(13))) * 100)/100) + '개</em> 낮습니다.'
                 }
                 comment_target.innerHTML = comments
             }).then(function(){
                 let comment_target = document.getElementById('data4_analysis')
                 let comments = ''
-                comments += '선택하신 [' + artitle[0] +'] 의 ' + userLabel.at(11) + ', 그리고 ' + userLabel.at(14) + ' 지표를 분석한 결과 '
-                if ((((Math.round(armax.at(14)) - Math.round(armax.at(11))) * 100)/100)<0) {
-                    comments += '최고 '+ userLabel.at(11) + ' 기준 동일한 ' + '장르' + '의 평균에 대비해 약 ' + '<em class="' + 'high' + '">' + (((Math.round(armax.at(11)) - Math.round(armax.at(14))) * 100)/100) + '회</em> 높습니다.'
+                comments += '선택하신 [' + artitle[0] +'] 의 ' + userLabel.at(14) + ', 그리고 ' + userLabel.at(17) + ' 지표를 분석한 결과 '
+                if ((((Math.round(armax.at(17)) - Math.round(armax.at(14))) * 100)/100)<0) {
+                    comments += '최고 '+ userLabel.at(14) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'high' + '">' + (((Math.round(armax.at(14)) - Math.round(armax.at(17))) * 100)/100) + '회</em> 높습니다.'
                 } else {
-                    comments += '최고 '+ userLabel.at(11) + ' 기준 동일한 ' + '장르' + '의 평균에 대비해 약 ' + '<em class="' + 'low' + '">' + (((Math.round(armax.at(14)) - Math.round(armax.at(11))) * 100)/100) + '회</em> 낮습니다.'
+                    comments += '최고 '+ userLabel.at(14) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'low' + '">' + (((Math.round(armax.at(17)) - Math.round(armax.at(14))) * 100)/100) + '회</em> 낮습니다.'
                 }
                 comment_target.innerHTML = comments
             }).then(function(){
                 let comment_target = document.getElementById('data5_analysis')
                 let comments = ''
-                comments += '선택하신 [' + artitle[0] +'] 의 ' + userLabel.at(12) + ', 그리고 ' + userLabel.at(15) + ' 지표를 분석한 결과 '
-                if ((((Math.round(armax.at(15)) - Math.round(armax.at(12))) * 100)/100)<0) {
-                    comments += '최고 '+ userLabel.at(12) + ' 기준 동일한 ' + '장르' + '의 평균에 대비해 약 ' + '<em class="' + 'high' + '">' + (((Math.round(armax.at(12)) - Math.round(armax.at(15))) * 100)/100) + '명</em> 높습니다.'
+                comments += '선택하신 [' + artitle[0] +'] 의 ' + userLabel.at(15) + ', 그리고 ' + userLabel.at(18) + ' 지표를 분석한 결과 '
+                if ((((Math.round(armax.at(18)) - Math.round(armax.at(15))) * 100)/100)<0) {
+                    comments += '최고 '+ userLabel.at(15) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'high' + '">' + (((Math.round(armax.at(15)) - Math.round(armax.at(18))) * 100)/100) + '명</em> 높습니다.'
                 } else {
-                    comments += '최고 '+ userLabel.at(12) + ' 기준 동일한 ' + '장르' + '의 평균에 대비해 약 ' + '<em class="' + 'low' + '">' + (((Math.round(armax.at(15)) - Math.round(armax.at(12))) * 100)/100) + '명</em> 낮습니다.'
-                }                comment_target.innerHTML = comments
+                    comments += '최고 '+ userLabel.at(15) + ' 기준 정식연재된 작품의 같은 회차와 비교해 약 ' + '<em class="' + 'low' + '">' + (((Math.round(armax.at(18)) - Math.round(armax.at(15))) * 100)/100) + '명</em> 낮습니다.'
+                }
+                comment_target.innerHTML = comments
             }).catch(err => {
                 console.log(err);
             })
         }
-        // readCsv("../data/total/idl_772265.csv")
-        // readCsv("../data/total/idl_398327.csv")
-        // readCsv("../data/total/id_123456.csv")
-        // readCsv("../data/total/id_456789.csv")
-        // readCsv("../data/total/df_only5.csv")
         readCsv("../data/total/id_"+lastData+".csv")
         console.log('현재 실행 중 파일은 '+lastData+'입니다.')
     </script>
