@@ -5,191 +5,75 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <script crossorigin="anonymous" src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
-    <!-- <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="./js/chartjs/chart.js"></script>
-    <!-- <script src="./js/danfo0.1.1/bundle.min.js"></script> -->
     <script src="./js/danfo0.1.1/index.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-    <!-- <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/danfojs@0.1.1/dist/index.min.js"></script> -->
-    <!-- <link rel="text/css" href="../styles/styles.css"> -->
     <link rel="stylesheet" href="./styles/styles.css">
-    <!-- <link rel="stylesheet" href="/node_modules/bxslider/dist/jquery.bxslider.css"> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 
     <script>
-      $(document).ready(function(){
-        $('.slider').bxSlider();
-      });
+        $(document).ready(function(){
+            $('.slider').slick({
+                'infinite': false
+            }).on('swipe', function(event, slick, direction){
+                
+            });
+        });
     </script>
 </head>
 <body>
-    <div class="wrap">
-        <div class="slider">
-            <div class="comp">
-                <h4 class="title">문석 모델이다</h4>
-                <div>
-                    <canvas id="myChart1"></canvas>
-                </div>
-                <div class="analysis">
-                    <h4>분석결과</h4>
-                    <p>
-                        당신의 결과는 이러쿵 저러쿵 <em>강조강조</em> 이걸 저렇게 하삼
-                    </p>
-                </div>
-            </div>
-            <div class="comp">
-                <h4 class="title">문석 모델이다</h4>
-                <div>
-                    <canvas id="myChart2"></canvas>
-                </div>
-                <div class="analysis">
-                    <h4>분석결과</h4>
-                    <p>
-                        당신의 결과는 이러쿵 저러쿵 <em>강조강조</em> 이걸 저렇게 하삼
-                    </p>
+    <div id="wrap">
+        <div class="main_search">
+            <img class="title_img" src="./styles/webtoon.jpeg" alt="네이버 웹툰">
+            <h1 class="f1">
+                <div>작전명:</div>
+                <div><span class="">띵작</span>을 찾아서</div>
+            </h1>
+            <div class="search_area">
+                <div id="searchbar" class="searchbar">
+                    <input type="text" placeholder='베도의 띵작을 입력하세요!'>
+                    <input type="button" id='gosearch' alt="겸색하기" value="띵작 찾기" class="hlight">
                 </div>
             </div>
+            <img class="fixed" src="./styles/wow2.png" alt="네이버 웹툰">
         </div>
     </div>
     <script>
         let ar
-        let armax = 0
-        let arcnt = 0
-        dfd.read_csv("./data/total/idl_772265.csv")
-        // dfd.read_csv("./data/total/idl_398327.csv")
-        .then(df => {
-            // 데이터 순서 rating, people, view, id
-            ar = df.values
-            armax = df.max().data
+        let dataLabel = ['id','title','thumbnail']
+        let userLabel = ['id','제목','섬네일']
+        const readCsv = (path) => {
+            let arcnt = 0
+            dfd.read_csv(path)
+            .then(df => {
+                ar = df.values
+            }).then(function(){
+                let ids, titles, thumbnails
+                ids = Array.from(ar, x => x.at(0))
+                titles = Array.from(ar, x => x.at(1))
+                thumbnails = Array.from(ar, x => x.at(2))
 
-            // console.log(ar[0])
-            // console.log(armax['data'])
-            // console.log(df.values)
-            // console.log(df.max({axis : 0}).print())
-            // console.log(df.max().print())
-            // console.log(df.max().data.at(0))
-        }).then(function(){
-            // console.log(ar[0])
-            // console.log(ar[2])
-            // console.log(armax['data'])
-            // console.log(armax[0])
+            }).catch(err => {
+                console.log(err);
+            })
+        }
 
-            // let ardata1 = new Array
-            // let ardata2 = new Array
-            arcnt = Array.from({length:ar.length}, (v,i)=>i+1+'회')
-            let maxindex1, maxindex2
-            
-            for(let j=0;j<ar.length;j++){
-                ardata1 = Array.from(ar, x => x.at(0)) // rating
-                ardata2 = Array.from(ar, x => x.at(1)) // people
-                console.log(ar.at(j).at(1),'나는 데이터')
-                console.log(armax.at(1),'나는 people맥스')
-                if (ar.at(j).at(0) === Math.round(armax.at(0) * 100)/100) {
-                    maxindex1 = j // max index
-                    console.log(j,'메롱1')
-                } 
-                if (ar.at(j).at(1) === Math.round(armax.at(1) * 100)/100){
-                    maxindex2 = j // max index
-                    console.log(j,'메롱2')
-                }
-            }
+        const targetLink = './pages/itemlist.html'
+        const hrefLink = () => {
+            location.href = targetLink
+        }
+        const divElement = document.getElementById('gosearch')
+        divElement.addEventListener('click', (e) => {
+            let targetElement = e.target;
+            targetElement = targetElement.previousElementSibling
+            enteredKeyword = targetElement.value 
+            localStorage.setItem('keyword',enteredKeyword)
+            console.log(enteredKeyword)
+            hrefLink()
+        });
 
-            // console.log(ardata2.indexof(armax[0]))
-            // console.log(typeof ar)
-            // console.log(maxindex)
-            let circleSize = 10
-            let pointRadius1 = Array.from({length:ar.length}, (i)=>3)
-            let pointRadius2 = Array.from({length:ar.length}, (i)=>3)
-            pointRadius1 = pointRadius1.fill(circleSize,maxindex1,maxindex1+1)
-            pointRadius2 = pointRadius2.fill(circleSize,maxindex2,maxindex2+1)
-            
-            // styling 
-            const bgcolor = ['#00800050', '#ff0000']
-            let bgcolorOpacity1 = Array.from({length:ar.length}, (i)=>bgcolor.at(0))
-            bgcolorOpacity1 = bgcolorOpacity1.fill(bgcolor.at(0),maxindex1,maxindex1+1)
-
-            let bgcolorOpacity2 = Array.from({length:ar.length}, (i)=>bgcolor.at(1))
-            bgcolorOpacity2 = bgcolorOpacity2.fill(bgcolor.at(1)+'50',maxindex2,maxindex2+1)
-
-            // console.log(pointRadius)
-            const ctx1 = document.getElementById('myChart1');
-            const ctx2 = document.getElementById('myChart2');
-            const data1 = {
-                labels: arcnt,
-                datasets: [
-                    {
-                        label: 'people',
-                        data: ardata2,
-                        borderColor: bgcolor.at(1),
-                        backgroundColor: bgcolorOpacity2,
-                        // pointStyle: 'circle',
-                        pointRadius: pointRadius2,
-                        pointHoverRadius: 15
-                    },
-                ]
-            }
-
-            const data2 = {
-                labels: arcnt,
-                datasets: [
-                    {
-                        label: 'rating',
-                        data: ardata1,
-                        borderColor: bgcolor.at(0),
-                        backgroundColor: bgcolorOpacity1,
-                        // pointStyle: 'circle',
-                        pointRadius: pointRadius1,
-                        pointHoverRadius: 15
-                    },
-                ]
-            }
-
-            new Chart(ctx1, {
-                type: 'line',
-                data: data1,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                usePointStyle: true
-                            }
-                        }
-                    }
-                }
-            });
-
-            new Chart(ctx2, {
-                type: 'line',
-                data: data2,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                usePointStyle: true
-                            }
-                        }
-                    }
-                }
-            });
-        }).then(function(){
-            // setTimeout([function(){
-            //     chart.data.datasets.forEach(dataset => {
-            //             dataset.pointStyle = 'circle';
-            //     })
-            //     chart.update()
-            // },1000])
-            
-            // ar.addEventListener('change', console.log(armax[0]))
-            
-        }).catch(err => {
-            console.log(err);
-        })
-        // console.log(ar)
+        readCsv("./data/total/"+'item_thumbnail.csv')
     </script>
 </body>
 </html>

@@ -24,51 +24,24 @@
 </head>
 <body>
     <div id="wrap">
-        <div id="item_list">
-            <!-- <a href="summary.html" id="id_123456" class="item_anchor">123456</a>
-            <a href="summary.html" id="id_456789" class="item_anchor">456789</a> -->
+        <div class="result_wrap">
+            <div class="result_title">
+                <div><em id="resultKeyword" class="f2"></em> 키워드를 포함하는 웹툰 </div>
+                <div><em id="resultCount" class="hlight"></em>개를 찾았어요!</div>
+            </div>
+            <div id="result_list" class="result_list">
+                <a href="summary.html" id="id_000000" class="item_anchor">000000</a>
+                <a href="summary.html" id="id_456789" class="item_anchor">456789</a>
+            </div>
+            <div class="">여기가 끝이유~</div>
         </div>
-        <div id="sample">
-            <span id="item1">월</span>
-            <span id="item2">화</span>
-            <span id="item3">수</span>
-            <span id="item4">목</span>
-            <span id="item5">금</span>
-            <span id="item6">토</span>
-            <span id="item7">일</span>
-          </div>
     </div>
-    <style>#sample span{
-        background: yellowgreen;
-        cursor: pointer;
-      }
-      
-      #sample span.active{
-        background: green;
-      }</style>
     <script>
-        let clickedItem
-        const itemcount = document.querySelectorAll('.item_anchor')
-        for (let i=0;i<itemcount.length;i++) {
-            const item = itemcount.item(i);
-            item.id
-            console.log(item.id)
+        let lastData
+        if(localStorage.getItem('keyword')){
+            lastData = localStorage.getItem('keyword')
+            console.log(lastData)
         }
-
-        // const divElement = document.getElementsByClassName('item_list')
-        // divElement.addEventListener('click', (e) => {
-        //     let targetElement = e.target;
-        //     clickedItem = targetElement.id; 
-        //     console.log(clickedItem)
-        // });
-        localStorage.setItem('id',clickedItem);
-        
-        const divElement1 = document.getElementById('sample');
-        divElement1.addEventListener('click', (e) => {
-            var targetElement = e.target;
-            targetElement.setAttribute('class', 'active'); 
-            console.log(targetElement.id)
-        });
 
         let ar
         let dataLabel = ['id','title','thumbnail']
@@ -79,36 +52,75 @@
                 ar = df.values
             }).then(function(){
                 let ids, titles, thumbnails
-                for(let j=0;j<ar.length;j++){
-                    ids = Array.from(ar, x => x.at(0))
-                    titles = Array.from(ar, x => x.at(1))
-                    thumbnails = Array.from(ar, x => x.at(2))
-                }
+                ids = Array.from(ar, x => x.at(0))
+                titles = Array.from(ar, x => x.at(1))
+                thumbnails = Array.from(ar, x => x.at(2))
                 
-                const addElement = (j) => {
-                    while (j < 10){
-                        let item = document.createElement('a')
-                        item.id = 'id_'+ids.at(j)
-                        item.className = 'item'
-                        item.href = 'summary.html'
-    
-                        let thumb = document.createElement('img')
-                        thumb.src = thumbnails.at(j)
-    
-                        let title = document.createElement('div')
-                        title.className = 'title'
-    
-                        let titlecontent = document.createTextNode(titles.at(j))
-    
-                        const itemlist = document.getElementById('item_list')
-                        item.appendChild(thumb)
-                        item.appendChild(title)
-                        title.appendChild(titlecontent)
-                        itemlist.appendChild(item)
-                        j++
+                let finditemindex = new Array
+                const fileredlist = titles.filter(function(t){
+                    let idx = String(t).indexOf(lastData)
+                    if (idx > -1) {
+                        finditemindex.push(titles.indexOf(t))
+                    }
+                })
+
+                let newids = new Array
+                let newtitles = new Array
+                let newthumbnails = new Array
+                for (var j=0;j<finditemindex.length;j++){
+                    let n = finditemindex[j]
+                    newids.push(ids[n])
+                    newtitles.push(titles[n])
+                    newthumbnails.push(thumbnails[n])
+                }
+
+                const addElement= (j) =>{
+                    let item = document.createElement('a')
+                    item.id = 'id_'+newids.at(j)
+                    item.className = 'item'
+                    // item.href = "javascript:void(0);"
+                    item.href = 'summary.html'
+                    // item.href = '#'
+
+                    let thumb = document.createElement('img')
+                    thumb.src = newthumbnails.at(j)
+
+                    let title = document.createElement('div')
+                    title.className = 'title'
+
+                    let titlecontent = document.createTextNode(newtitles.at(j))
+
+                    const itemlist = document.getElementById('result_list')
+                    item.appendChild(thumb)
+                    item.appendChild(title)
+                    title.appendChild(titlecontent)
+                    itemlist.appendChild(item)
+                }
+
+                const nothing = () => {
+                    let content = ''
+                    content += '<div class="nodata"><p class="f2">이런! 아무것도 없습니다!</p><a href="../index.html">돌아가기</a></div>'
+                    document.body.innerHTML = content
+                }
+
+                let k = 0
+                if (finditemindex.length === 0){
+                    nothing()
+                } else {
+                    while (k < finditemindex.length) {
+                        var addTimeout = setInterval(addElement(k), 3000);
+                        k++
                     }
                 }
-                var addTimeout = setTimeout(addElement(0), 300);
+                let resultTarget1 = document.getElementById('resultKeyword')
+                let resultTarget2 = document.getElementById('resultCount')
+                let result1 = lastData
+                let result2 = finditemindex.length
+
+                resultTarget1.innerHTML = result1
+                resultTarget2.innerHTML = result2
+                
+                
 
             }).then(function(){
 
@@ -116,6 +128,31 @@
                 console.log(err);
             })
         }
+
+        let targetLink = 'summary.html'
+        const hrefLink = () => {
+            location.href = targetLink
+        }
+
+        const Loading = () => {
+            let pop = ''
+            pop += '<div class="dimmed"><div class="wrapper">'+'<img src="../styles/loading.jpg">' +'</div></div>'
+            document.body.innerHTML=pop
+        }
+        
+        const divElement = document.getElementById('result_list')
+        divElement.addEventListener('click', (e) => {
+            let targetElement = e.target;
+            clickedItem = targetElement.id 
+            // localStorage.setItem('id',15067)
+            localStorage.setItem('id',clickedItem.substr(3))
+            // console.log(clickedItem.substr(3))
+            // Loading()
+            // setTimeout(() => {
+            //     hrefLink()
+            // }, 4000);
+        });
+
         readCsv("../data/total/"+'item_thumbnail.csv')
     </script>
 </body>
