@@ -27,9 +27,11 @@
             <div class="summary_part">
                 <div class="summary_title">
                     <!-- <div id="wtthumb"></div> -->
-                    <h3 class="title"><em id="wttitle"></em>의 정식연재 확률은?<br /></h3>
-                    <em id="promote"></em>
-                    <div class="sub">2022년 12월 기준</div>
+                    <h3 class="title"><em id="wttitle"></em>의 <br />정식연재 확률은?<br /></h3>
+                    <div>
+                        <em id="promote"></em>
+                        <div class="sub">2022년 12월 기준</div>
+                    </div>
                 </div>
                 <ul class="summary_list">
                     <li class="item">
@@ -61,7 +63,7 @@
 
             <div class="mean_compare">
                 <div class="title_area">
-                    <h3>내 작품과 조건 별 전체 평균 비교</h3>
+                    <h3>내 작품과 조건 별 전체 평균 비교해보기</h3>
                 </div>
                 <div class="slider">
                     <div class="chart_item"><canvas id="myChart1"></canvas></div>
@@ -138,10 +140,10 @@
             let arcnt = 0
             dfd.read_csv(path)
             .then(df => {
+                eval('newdf'+' =df.groupby(["id"])')
+                
                 ar = df.values
-                armax = df.max().data
-                armin = df.min().data
-                eval('lastdataDf'+' =df.groupby(["id"]).get_groups(['+lastData+']).values')
+                lastdataDf = newdf.get_groups([lastData]).values
                 arcnt = Array.from({length:lastdataDf.length}, (v,i)=>i+1+'회')
                 
                 arids                         = Array.from(lastdataDf, x => x.at(0))
@@ -151,9 +153,9 @@
                 promote5                      = Math.ceil(lastdataDf.at(0).at(2)*100)
                 promote10                     = Math.ceil(lastdataDf.at(0).at(3)*100)
                 
-                first_positive_5              = Math.ceil(lastdataDf.at(0).at(4))
-                second_view_1                 = Math.ceil(lastdataDf.at(0).at(5))
-                third_rating_people_5         = Math.ceil(lastdataDf.at(0).at(6))
+                first_positive_5              = Array.from(lastdataDf, x => x.at(4))
+                second_view_1                 = Array.from(lastdataDf, x => x.at(5))
+                third_rating_people_5         = Array.from(lastdataDf, x => x.at(6))
 
                 first_positive_5_1            = Math.ceil(lastdataDf.at(0).at(7))
                 second_view_1_1               = Math.ceil(lastdataDf.at(0).at(8))
@@ -190,28 +192,51 @@
                     rating_people_genre           = Math.ceil(lastdataDf.at(0).at(42))
                 }
 
-                console.log(arPositive)
-                // console.log(first_positive_5_1)
-                // console.log(first_positive_5_genre)
+                
+                armax = new Array
+                armin = new Array
+                armax.push(Math.max.apply(null, first_positive_5))
+                armax.push(Math.max.apply(null, second_view_1))
+                armax.push(Math.max.apply(null, third_rating_people_5))
 
+                armax.push(Math.max.apply(null, arPositive))
+                armax.push(Math.max.apply(null, arView))
+                armax.push(Math.max.apply(null, arRating))
+
+                armax.push(Math.max.apply(null, arPositiveTotal))
+                armax.push(Math.max.apply(null, arViewTotal))
+                armax.push(Math.max.apply(null, arRatingTotal))
+
+                armin.push(Math.min.apply(null, first_positive_5))
+                armin.push(Math.min.apply(null, second_view_1))
+                armin.push(Math.min.apply(null, third_rating_people_5))
+                armin.push(Math.min.apply(null, arPositive))
+                armin.push(Math.min.apply(null, arView))
+                armin.push(Math.min.apply(null, arRating))
+                armin.push(Math.min.apply(null, arPositiveTotal))
+                armin.push(Math.min.apply(null, arViewTotal))
+                armin.push(Math.min.apply(null, arRatingTotal))
+                console.log(armax)
+                
                 for(let j=0;j<lastdataDf.length;j++){
-                    if (ar.at(j).at(13) === Math.round(armax.at(13) * 100)/100) {
+
+                    if (Math.ceil(lastdataDf.at(j).at(13)) === Math.ceil(armax.at(3))) {
                         maxindex3 = j // max index
                     } 
-                    if (ar.at(j).at(14) === Math.round(armax.at(14) * 100)/100){
+                    if (Math.ceil(lastdataDf.at(j).at(14)) === Math.ceil(armax.at(4))) {
                         maxindex4 = j // max index
                     }
-                    if (ar.at(j).at(15) === Math.round(armax.at(15) * 100)/100){
+                    if (Math.ceil(lastdataDf.at(j).at(15)) === Math.ceil(armax.at(5))) {
                         maxindex5 = j // max index
                     }
                     
-                    if (ar.at(j).at(13) === Math.round(armin.at(13) * 100)/100) {
+                    if (Math.ceil(lastdataDf.at(j).at(13)) === Math.ceil(armin.at(3))) {
                         minindex3 = j // max index
                     } 
-                    if (ar.at(j).at(14) === Math.round(armin.at(14) * 100)/100){
+                    if (Math.ceil(lastdataDf.at(j).at(14)) === Math.ceil(armin.at(4))){
                         minindex4 = j // max index
                     }
-                    if (ar.at(j).at(15) === Math.round(armin.at(15) * 100)/100){
+                    if (Math.ceil(lastdataDf.at(j).at(15)) === Math.ceil(armin.at(5))){
                         minindex5 = j // max index
                     }
                 }
