@@ -54,9 +54,19 @@
     <script>
         let lastData, readfile
         if(localStorage.getItem('id')){
+            // 379105
+            // 592330
+            // 671376
+            // 714775
+            // 755833
+            // 803047
             lastData = localStorage.getItem('id')
-            readfile = (Number(lastData)>591250) ? 'result2.csv' : 
-            (Number(lastData)>714582) ? 'result3.csv' : 'result1.csv'
+            // lastData = 739130
+            readfile = (Number(lastData)<379105) ? 'result1.csv' : 
+            (Number(lastData)<592330) ? 'result2.csv' :
+            (Number(lastData)<671376) ? 'result3.csv' :
+            (Number(lastData)<714775) ? 'result4.csv' :
+            (Number(lastData)<755833) ? 'result5.csv' : 'result6.csv'
         }
         let gbId, gbLabel
         let ar, armax, armin, aridIndex, artitle, bigfan,fancount
@@ -86,13 +96,14 @@
             let arcnt = 0
             dfd.read_csv(path)
             .then(df => {
+                console.log(df.columns)
                 eval('newdf'+' =df.groupby(["id"])')
                 
                 ar = df.values
                 lastdataDf = newdf.get_groups([lastData]).values
 
-                bigfan = lastdataDf.at(0).at(23)
-                fancount = lastdataDf.at(0).at(22)
+                bigfan = lastdataDf.at(0).at(36)
+                fancount = lastdataDf.at(0).at(35)
                 console.log(fancount)
             }).then(function() {
                 let bigfanTarget = document.getElementById('bigfan')

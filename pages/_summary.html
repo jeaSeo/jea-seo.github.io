@@ -78,19 +78,12 @@
     <script>
         let lastData, readfile
         if(localStorage.getItem('id')){
-            // 379105
             // 592330
-            // 671376
             // 714775
-            // 755833
             // 803047
             lastData = localStorage.getItem('id')
-            // lastData = 739130
-            readfile = (Number(lastData)<379105) ? 'result1.csv' : 
-            (Number(lastData)<592330) ? 'result2.csv' :
-            (Number(lastData)<671376) ? 'result3.csv' :
-            (Number(lastData)<714775) ? 'result4.csv' :
-            (Number(lastData)<755833) ? 'result5.csv' : 'result6.csv'
+            readfile = (Number(lastData)>592330) ? 'result2.csv' : 
+            (Number(lastData)>714775) ? 'result3.csv' : 'result1.csv'
         }
         let gbId, gbLabel
         let ar, armax, armin, aridIndex, artitle, arlabel, arcmmtcnt, promote5, promote10
@@ -144,63 +137,71 @@
             ['정식승격 작품의','긍정댓글수 평균'], ['정식승격 작품의','조회수 평균'], ['정식승격 작품의','5회차 평점참여인원 평균'],
             ['동일 전개방식 작품의','긍정댓글수 평균'], ['동일 전개방식 작품의','조회수 평균'], ['동일 전개방식 작품의','평점참여인원 평균']
         ]
+
         const readCsv = (path) => {
             let arcnt = 0
             dfd.read_csv(path)
             .then(df => {
                 eval('newdf'+' =df.groupby(["id"])')
+
+                newdf
                 
                 ar = df.values
                 lastdataDf = newdf.get_groups([lastData]).values
                 arcnt = Array.from({length:lastdataDf.length}, (v,i)=>i+1+'회')
-
-                console.log(df.columns)
                 
                 arids                         = Array.from(lastdataDf, x => x.at(0))
-                artitle                       = Array.from(lastdataDf, x => x.at(2))
-                promote5                      = Math.round(lastdataDf.at(0).at(4))
+                artitle                       = Array.from(lastdataDf, x => x.at(1))
+                promote5                      = Math.round(lastdataDf.at(0).at(2))
                 promote10                     = Math.round(lastdataDf.at(0).at(3))
-                promote5                      = Math.ceil(lastdataDf.at(0).at(4)*100)
+                promote5                      = Math.ceil(lastdataDf.at(0).at(2)*100)
                 promote10                     = Math.ceil(lastdataDf.at(0).at(3)*100)
                 
-                first_positive_5              = Array.from(lastdataDf, x => x.at(5))
-                second_view_1                 = Array.from(lastdataDf, x => x.at(6))
-                third_rating_people_5         = Array.from(lastdataDf, x => x.at(7))
+                first_positive_5              = Array.from(lastdataDf, x => x.at(4))
+                second_view_1                 = Array.from(lastdataDf, x => x.at(5))
+                third_rating_people_5         = Array.from(lastdataDf, x => x.at(6))
 
-                first_positive_5_1            = Math.ceil(lastdataDf.at(0).at(8))
-                second_view_1_1               = Math.ceil(lastdataDf.at(0).at(9))
-                third_rating_people_5_1       = Math.ceil(lastdataDf.at(0).at(10))
+                first_positive_5_1            = Math.ceil(lastdataDf.at(0).at(7))
+                second_view_1_1               = Math.ceil(lastdataDf.at(0).at(8))
+                third_rating_people_5_1       = Math.ceil(lastdataDf.at(0).at(9))
 
-                arPositive                    = Array.from(lastdataDf, x => Math.ceil(x.at(20)))
-                arView                        = Array.from(lastdataDf, x => Math.ceil(x.at(21)))
-                arRating                      = Array.from(lastdataDf, x => Math.ceil(x.at(22)))
+                arPositive                    = Array.from(lastdataDf, x => Math.ceil(x.at(13)))
+                arView                        = Array.from(lastdataDf, x => Math.ceil(x.at(14)))
+                arRating                      = Array.from(lastdataDf, x => Math.ceil(x.at(15)))
 
-                arPositiveTotal               = Array.from(lastdataDf, x => Math.ceil(x.at(23)))
-                arViewTotal                   = Array.from(lastdataDf, x => Math.ceil(x.at(24)))
-                arRatingTotal                 = Array.from(lastdataDf, x => Math.ceil(x.at(25)))
+                arPositiveTotal               = Array.from(lastdataDf, x => Math.ceil(x.at(16)))
+                arViewTotal                   = Array.from(lastdataDf, x => Math.ceil(x.at(17)))
+                arRatingTotal                 = Array.from(lastdataDf, x => Math.ceil(x.at(18)))
 
-                if (ar.at(0).at(3) === 'episode') {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(11))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(12))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(13))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(26))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(27))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(28))
-                } else if (ar.at(0).at(3) === 'omnibus') {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(14))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(15))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(16))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(29))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(30))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(31))
-                } else if (ar.at(0).at(3) === 'story') {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(17))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(18))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(19))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(32))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(33))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(34))
+                if (ar.at(0).at(10) != NaN) {
+                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(10))
+                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(11))
+                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(12))
+                    positive_genre                = Math.ceil(lastdataDf.at(0).at(19))
+                    view_genre                    = Math.ceil(lastdataDf.at(0).at(20))
+                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(21))
+                } else if (ar.at(0).at(31) != NaN) {
+                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(31))
+                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(32))
+                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(33))
+                    positive_genre                = Math.ceil(lastdataDf.at(0).at(34))
+                    view_genre                    = Math.ceil(lastdataDf.at(0).at(35))
+                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(36))
+                } else if (ar.at(0).at(37) != NaN) {
+                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(37))
+                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(38))
+                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(39))
+                    positive_genre                = Math.ceil(lastdataDf.at(0).at(40))
+                    view_genre                    = Math.ceil(lastdataDf.at(0).at(41))
+                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(42))
                 }
+
+                console.log(lastdataDf.at(0).at(31))
+                console.log(lastdataDf.at(0).at(32))
+                console.log(lastdataDf.at(0).at(33))
+                console.log(lastdataDf.at(0).at(34))
+                console.log(lastdataDf.at(0).at(35))
+                console.log(lastdataDf.at(0).at(36))
                 
                 armax = new Array
                 armin = new Array
@@ -229,23 +230,23 @@
                 
                 for(let j=0;j<lastdataDf.length;j++){
 
-                    if (Math.ceil(lastdataDf.at(j).at(20)) === Math.ceil(armax.at(3))) {
+                    if (Math.ceil(lastdataDf.at(j).at(13)) === Math.ceil(armax.at(3))) {
                         maxindex3 = j // max index
                     } 
-                    if (Math.ceil(lastdataDf.at(j).at(21)) === Math.ceil(armax.at(4))) {
+                    if (Math.ceil(lastdataDf.at(j).at(14)) === Math.ceil(armax.at(4))) {
                         maxindex4 = j // max index
                     }
-                    if (Math.ceil(lastdataDf.at(j).at(22)) === Math.ceil(armax.at(5))) {
+                    if (Math.ceil(lastdataDf.at(j).at(15)) === Math.ceil(armax.at(5))) {
                         maxindex5 = j // max index
                     }
                     
-                    if (Math.ceil(lastdataDf.at(j).at(20)) === Math.ceil(armin.at(3))) {
+                    if (Math.ceil(lastdataDf.at(j).at(13)) === Math.ceil(armin.at(3))) {
                         minindex3 = j // max index
                     } 
-                    if (Math.ceil(lastdataDf.at(j).at(21)) === Math.ceil(armin.at(4))){
+                    if (Math.ceil(lastdataDf.at(j).at(14)) === Math.ceil(armin.at(4))){
                         minindex4 = j // max index
                     }
-                    if (Math.ceil(lastdataDf.at(j).at(22)) === Math.ceil(armin.at(5))){
+                    if (Math.ceil(lastdataDf.at(j).at(15)) === Math.ceil(armin.at(5))){
                         minindex5 = j // max index
                     }
                 }
