@@ -266,8 +266,12 @@ em {
     margin-top: 5px;
     width: 100%;
     text-align: center;
-    padding: 15px 0;
     border-radius: 6px;
+}
+
+.summary_wrap .more .item_anchor {
+    padding: 15px 0;
+    display: block;
 }
 
 .mean_compare .title_area {
