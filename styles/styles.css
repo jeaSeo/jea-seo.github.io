@@ -475,11 +475,19 @@ em {
     margin-top: 80px;
 }
 
+.last_wrap ol {
+    /* background-color: #; */
+}
+
 .last_wrap ol,
 .last_wrap li {
     list-style: decimal;
-    margin-left: 5px;
-    padding-left: 5px;
+    margin: 0 10px;
+    padding: 0 5px;
+}
+
+.last_wrap ol li + li {
+    margin-top: 4px;
 }
 
 .last_wrap .more {
