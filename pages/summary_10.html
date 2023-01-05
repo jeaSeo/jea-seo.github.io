@@ -29,7 +29,7 @@
             <div class="summary_part">
                 <div class="summary_title">
                     <!-- <div id="wtthumb"></div> -->
-                    <h3 class="title"><em id="wttitle"></em>의 <br />정식연재 확률은?<br /></h3>
+                    <h3 class="title"><em id="wttitle"></em>의 <br />정식연재 확률은?<br /><input type="checkbox" name="is10th" id="check10"><label for="check10">10회차</label></h3>
                     <div>
                         <em id="promote"></em>
                         <div class="sub">2022년 12월 기준</div>
@@ -78,12 +78,18 @@
     <script>
         let lastData, readfile
         if(localStorage.getItem('id')){
+            // 379105
             // 592330
+            // 671376
             // 714775
+            // 755833
             // 803047
             lastData = localStorage.getItem('id')
-            readfile = (Number(lastData)>592330) ? 'result2.csv' : 
-            (Number(lastData)>714775) ? 'result3.csv' : 'result1.csv'
+            readfile = (Number(lastData)>379105) ? 'result2.csv' : 
+            (Number(lastData)>592330) ? 'result3.csv' :
+            (Number(lastData)>671376) ? 'result4.csv' :
+            (Number(lastData)>714775) ? 'result5.csv' :
+            (Number(lastData)>755833) ? 'result6.csv' : 'result1.csv'
         }
         let gbId, gbLabel
         let ar, armax, armin, aridIndex, artitle, arlabel, arcmmtcnt, promote5, promote10
@@ -97,20 +103,42 @@
         let maxindex3, maxindex4, maxindex5
         let minindex3, minindex4, minindex5
         // labels 
+        // const dataLabel = ['id', 'title', '5th', '10th', 
+        // 'first_positive_5', 'second_view_1','third_rating_people_5', 
+        // 'first_positive_5_1', 'second_view_1_1',
+        // 'third_rating_people_5_1', 'first_positive_5_episode',
+        // 'second_view_1_episode', 'third_rating_people_5_episode', 'positive',
+        // 'view', 'rating_people', 'positive_1', 'view_1', 'rating_people_1',
+        // 'positive_episode', 'view_episode', 'rating_people_episode',
+        // 'comment_writer_count', 'comment_writer', 'pos_keyword_1',
+        // 'pos_keyword_2', 'pos_keyword_3', 'neg_keyword_1', 'neg_keyword_2',
+        // 'neg_keyword_3', 'label', 'first_positive_5_story',
+        // 'second_view_1_story', 'third_rating_people_5_story', 'positive_story',
+        // 'view_story', 'rating_people_story', 'first_positive_5_omnibus',
+        // 'second_view_1_omnibus', 'third_rating_people_5_omnibus',
+        // 'positive_omnibus', 'view_omnibus', 'rating_people_omnibus']
+
         const dataLabel = ['id', 'title', '5th', '10th', 
         'first_positive_5', 'second_view_1','third_rating_people_5', 
-        'first_positive_5_1', 'second_view_1_1',
-        'third_rating_people_5_1', 'first_positive_5_episode',
-        'second_view_1_episode', 'third_rating_people_5_episode', 'positive',
-        'view', 'rating_people', 'positive_1', 'view_1', 'rating_people_1',
-        'positive_episode', 'view_episode', 'rating_people_episode',
-        'comment_writer_count', 'comment_writer', 'pos_keyword_1',
-        'pos_keyword_2', 'pos_keyword_3', 'neg_keyword_1', 'neg_keyword_2',
-        'neg_keyword_3', 'label', 'first_positive_5_story',
-        'second_view_1_story', 'third_rating_people_5_story', 'positive_story',
-        'view_story', 'rating_people_story', 'first_positive_5_omnibus',
-        'second_view_1_omnibus', 'third_rating_people_5_omnibus',
-        'positive_omnibus', 'view_omnibus', 'rating_people_omnibus']
+       'first_positive_5_1', 'second_view_1_1','third_rating_people_5_1', 
+       'first_positive_5_episode','second_view_1_episode', 'third_rating_people_5_episode', 
+       'positive','view', 'rating_people', 
+       'positive_1', 'view_1', 'rating_people_1',
+       'positive_episode', 'view_episode', 'rating_people_episode',
+       'comment_writer_count', 'comment_writer', 
+       'pos_keyword_1','pos_keyword_2', 'pos_keyword_3', 
+       'neg_keyword_1', 'neg_keyword_2','neg_keyword_3', 
+       'first_positive_10_1', 'second_rating_people_2_1','third_unreco_sum_5_1',
+       'positive_1_10th', 'unreco_sum_1','rating_people_10th', 'positive_episode_10th', 
+       'unreco_sum_episode',
+       'rating_people_episode_10th', 'label', 'first_positive_5_story',
+       'second_view_1_story', 'third_rating_people_5_story', 'positive_story',
+       'view_story', 'rating_people_story', 'positive_story_10th',
+       'unreco_sum_story', 'rating_people_story_10th',
+       'first_positive_5_omnibus', 'second_view_1_omnibus',
+       'third_rating_people_5_omnibus', 'positive_omnibus', 'view_omnibus',
+       'rating_people_omnibus', 'positive_omnibus_10th', 'unreco_sum_omnibus',
+       'rating_people_omnibus_10th']
 
         const userLabel = ['id', '제목', '5회차 기준 승격확률', '10회차 기준 승격확률', 
         '5회차 긍정댓글수', '1회차 조회수', '5회차 평점참여인원', 
@@ -146,7 +174,11 @@
                 
                 ar = df.values
                 lastdataDf = newdf.get_groups([lastData]).values
-                arcnt = Array.from({length:lastdataDf.length}, (v,i)=>i+1+'회')
+                if(lastdataDf.legnth == 10) {
+                    console.log('10줄이나되네!')
+                } else {
+                    console.log('휴!')
+                }
                 
                 arids                         = Array.from(lastdataDf, x => x.at(0))
                 artitle                       = Array.from(lastdataDf, x => x.at(1))
@@ -158,6 +190,9 @@
                 first_positive_5              = Array.from(lastdataDf, x => x.at(4))
                 second_view_1                 = Array.from(lastdataDf, x => x.at(5))
                 third_rating_people_5         = Array.from(lastdataDf, x => x.at(6))
+                first_positive_5              = first_positive_5.filter(Boolean);
+                second_view_1                 = second_view_1.filter(Boolean);
+                third_rating_people_5         = third_rating_people_5.filter(Boolean);
 
                 first_positive_5_1            = Math.ceil(lastdataDf.at(0).at(7))
                 second_view_1_1               = Math.ceil(lastdataDf.at(0).at(8))
@@ -166,10 +201,19 @@
                 arPositive                    = Array.from(lastdataDf, x => Math.ceil(x.at(13)))
                 arView                        = Array.from(lastdataDf, x => Math.ceil(x.at(14)))
                 arRating                      = Array.from(lastdataDf, x => Math.ceil(x.at(15)))
+                arPositive                    = arPositive.filter(Boolean);
+                arView                        = arView.filter(Boolean);
+                arRating                      = arRating.filter(Boolean);
 
                 arPositiveTotal               = Array.from(lastdataDf, x => Math.ceil(x.at(16)))
                 arViewTotal                   = Array.from(lastdataDf, x => Math.ceil(x.at(17)))
                 arRatingTotal                 = Array.from(lastdataDf, x => Math.ceil(x.at(18)))
+                arPositiveTotal               = arPositiveTotal.filter(Boolean);
+                arViewTotal                   = arViewTotal.filter(Boolean);
+                arRatingTotal                 = arRatingTotal.filter(Boolean);
+
+                arcnt = Array.from({length:arPositive.length}, (v,i)=>i+1+'회')
+
 
                 if (ar.at(0).at(10) != NaN) {
                     first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(10))
@@ -178,28 +222,31 @@
                     positive_genre                = Math.ceil(lastdataDf.at(0).at(19))
                     view_genre                    = Math.ceil(lastdataDf.at(0).at(20))
                     rating_people_genre           = Math.ceil(lastdataDf.at(0).at(21))
-                } else if (ar.at(0).at(31) != NaN) {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(31))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(32))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(33))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(34))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(35))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(36))
-                } else if (ar.at(0).at(37) != NaN) {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(37))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(38))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(39))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(40))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(41))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(42))
+                    console.log('잠좀자자')
+                } else if (ar.at(0).at(32) != NaN) {
+                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(32))
+                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(33))
+                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(34))
+                    positive_genre                = Math.ceil(lastdataDf.at(0).at(35))
+                    view_genre                    = Math.ceil(lastdataDf.at(0).at(36))
+                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(37))
+                    console.log('응')
+                } else if (ar.at(0).at(38) != NaN) {
+                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(38))
+                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(39))
+                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(40))
+                    positive_genre                = Math.ceil(lastdataDf.at(0).at(41))
+                    view_genre                    = Math.ceil(lastdataDf.at(0).at(42))
+                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(43))
+                    console.log('아니')
                 }
 
-                console.log(lastdataDf.at(0).at(31))
-                console.log(lastdataDf.at(0).at(32))
-                console.log(lastdataDf.at(0).at(33))
-                console.log(lastdataDf.at(0).at(34))
-                console.log(lastdataDf.at(0).at(35))
-                console.log(lastdataDf.at(0).at(36))
+                console.log(ar.at(0).at(10))
+                console.log(ar.at(0).at(11))
+                console.log(ar.at(0).at(12))
+                console.log(ar.at(0).at(19))
+                console.log(ar.at(0).at(20))
+                console.log(ar.at(0).at(21))
                 
                 armax = new Array
                 armin = new Array
@@ -224,7 +271,6 @@
                 armin.push(Math.min.apply(null, arPositiveTotal))
                 armin.push(Math.min.apply(null, arViewTotal))
                 armin.push(Math.min.apply(null, arRatingTotal))
-                console.log(armax)
                 
                 for(let j=0;j<lastdataDf.length;j++){
 
@@ -336,7 +382,7 @@
                     labels: [userlabelforchart[4],userlabelforchart[7],userlabelforchart[10]],
                     datasets: [
                         {
-                            data: [first_positive_5[0], first_positive_5_1, first_positive_5_genre],
+                            data: [first_positive_5[0], first_positive_5_1, ar.at(0).at(10)],
                             borderColor: bgcolor.at(1),
                             backgroundColor: [bgcolor.at(0), bgcolor.at(1), bgcolor.at(1)],
                             pointRadius: pointRadius3,
@@ -344,7 +390,10 @@
                         }
                     ]
                 }
-                console.log(1,first_positive_5)
+
+                console.log(first_positive_5)
+                console.log(first_positive_5_1)
+                console.log(first_positive_5_genre)
 
                 const data2 = {
                     labels: [userlabelforchart[5],userlabelforchart[8],userlabelforchart[11]],

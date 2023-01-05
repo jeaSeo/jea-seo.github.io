@@ -11,6 +11,7 @@
     <script src="../js/danfo0.1.1/index.min.js"></script>
     <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 
     <script>
         $(document).ready(function(){
@@ -29,9 +30,7 @@
                 <div><em id="resultKeyword" class="f2"></em> 키워드를 포함하는 웹툰 </div>
                 <div><em id="resultCount" class="hlight"></em>개를 찾았어요!</div>
             </div>
-            <div id="result_list" class="result_list">
-            </div>
-            <!-- <div class="">여기가 끝이유~</div> -->
+            <div id="result_list" class="result_list"></div>
         </div>
     </div>
     <script>
@@ -73,12 +72,15 @@
                 }
 
                 const addElement= (j) =>{
-                    let item = document.createElement('a')
-                    item.id = 'id_'+newids.at(j)
+                    let item = document.createElement('div')
                     item.className = 'item'
-                    item.href = "javascript:void(0);"
                     // item.href = 'summary.html'
                     // item.href = '#'
+
+                    let anchor = document.createElement('a')
+                    anchor.id = 'id_'+newids.at(j)
+                    anchor.className = 'item_anchor'
+                    item.href = "javascript:void(0);"
 
                     let thumb = document.createElement('img')
                     thumb.src = newthumbnails.at(j)
@@ -92,6 +94,7 @@
                     item.appendChild(thumb)
                     item.appendChild(title)
                     title.appendChild(titlecontent)
+                    item.appendChild(anchor)
                     itemlist.appendChild(item)
                 }
 
