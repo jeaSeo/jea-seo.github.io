@@ -135,8 +135,13 @@ em {
     justify-content: space-between;
     align-items: center;
     text-align: left;
+    font-weight: normal;
 }
 .analysis .item + .item {
+}
+
+.analysis .item span:first-child {
+    /* color: #999; */
 }
 .analysis .item .count {
     flex-shrink: 0;
@@ -145,6 +150,8 @@ em {
 .analysis div {
     text-align: center;
     word-break: keep-all;
+    font-weight: bold;
+    font-size: 15px;
 }
 
 .analysis p {
@@ -210,6 +217,7 @@ em {
 
 .summary_wrap .summary_title .title {
     font-size: 20px;
+    word-break: keep-all;
 }
 
 .summary_wrap .sub {
@@ -256,7 +264,8 @@ em {
 
 .summary_list .item .part {
     font-weight: 600;
-    font-size: 1.125rem;
+    /* font-size: 1.125rem; */
+    font-size: 16px;
     margin-bottom: 10px;
 }
 
