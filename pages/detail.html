@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <script src="../js/analysis.js"></script>
 
     <script>
         $(document).ready(function(){
@@ -26,35 +27,37 @@
 </head>
 <body>
     <div id="wrap">
-        <div class="slider">
-            <div class="comp">
-                <h4 class="title" id="data3_title"></h4>
-                <div>
-                    <canvas id="myChart3"></canvas>
+        <div class="detail_wrap">
+            <div class="slider">
+                <div class="comp">
+                    <h4 class="title" id="data7_title"></h4>
+                    <div>
+                        <canvas id="myChart4"></canvas>
+                    </div>
+                    <div class="analysis">
+                        <div class="title">분석결과</div>
+                        <div id="data7_analysis"></div>
+                    </div>
                 </div>
-                <div class="analysis">
-                    <div class="title">분석결과</div>
-                    <div id="data3_analysis"></div>
+                <div class="comp">
+                    <h4 class="title" id="data5_title"></h4>
+                    <div>
+                        <canvas id="myChart5"></canvas>
+                    </div>
+                    <div class="analysis">
+                        <div class="title">분석결과</div>
+                        <div id="data5_analysis"></div>
+                    </div>
                 </div>
-            </div>
-            <div class="comp">
-                <h4 class="title" id="data4_title"></h4>
-                <div>
-                    <canvas id="myChart4"></canvas>
-                </div>
-                <div class="analysis">
-                    <div class="title">분석결과</div>
-                    <div id="data4_analysis"></div>
-                </div>
-            </div>
-            <div class="comp">
-                <h4 class="title" id="data5_title"></h4>
-                <div>
-                    <canvas id="myChart5"></canvas>
-                </div>
-                <div class="analysis">
-                    <div class="title">분석결과</div>
-                    <div id="data5_analysis"></div>
+                <div class="comp">
+                    <h4 class="title" id="data6_title"></h4>
+                    <div>
+                        <canvas id="myChart6"></canvas>
+                    </div>
+                    <div class="analysis">
+                        <div class="title">분석결과</div>
+                        <div id="data6_analysis"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,399 +68,14 @@
     <script>
         let lastData, readfile
         if(localStorage.getItem('id')){
-            // 379105
-            // 592330
-            // 671376
-            // 714775
-            // 755833
-            // 803047
             lastData = localStorage.getItem('id')
-            // lastData = 739130
             readfile = (Number(lastData)<379105) ? 'result1.csv' : 
-            (Number(lastData)<592330) ? 'result2.csv' :
-            (Number(lastData)<671376) ? 'result3.csv' :
-            (Number(lastData)<714775) ? 'result4.csv' :
-            (Number(lastData)<755833) ? 'result5.csv' : 'result6.csv'
+                       (Number(lastData)<592330) ? 'result2.csv' :
+                       (Number(lastData)<671376) ? 'result3.csv' :
+                       (Number(lastData)<714775) ? 'result4.csv' :
+                       (Number(lastData)<755833) ? 'result5.csv' : 'result6.csv'
         }
 
-        let gbId, gbLabel
-        let ar, armax, armin, aridIndex, artitle, arlabel, arcmmtcnt, promote5, promote10
-        let arPositive, arView, arRating
-        let first_positive_5, second_view_1, third_rating_people_5
-        let first_positive_5_1, second_view_1_1, third_rating_people_5_1
-        let first_positive_5_genre, second_view_1_genre, third_rating_people_5_genre
-        let arPositiveTotal, arViewTotal, arRatingTotal
-        let arPosKeyword1, arPosKeyword2, arPosKeyword3
-        let arNegKeyword1, arNegKeyword2, arNegKeyword3
-        let maxindex3, maxindex4, maxindex5
-        let minindex3, minindex4, minindex5
-        // labels 
-        const dataLabel = ['id', 'title', '5th', '10th', 
-        'first_positive_5', 'second_view_1','third_rating_people_5', 
-        'first_positive_5_1', 'second_view_1_1',
-        'third_rating_people_5_1', 'first_positive_5_episode',
-        'second_view_1_episode', 'third_rating_people_5_episode', 'positive',
-        'view', 'rating_people', 'positive_1', 'view_1', 'rating_people_1',
-        'positive_episode', 'view_episode', 'rating_people_episode',
-        'comment_writer_count', 'comment_writer', 'pos_keyword_1',
-        'pos_keyword_2', 'pos_keyword_3', 'neg_keyword_1', 'neg_keyword_2',
-        'neg_keyword_3', 'label', 'first_positive_5_story',
-        'second_view_1_story', 'third_rating_people_5_story', 'positive_story',
-        'view_story', 'rating_people_story', 'first_positive_5_omnibus',
-        'second_view_1_omnibus', 'third_rating_people_5_omnibus',
-        'positive_omnibus', 'view_omnibus', 'rating_people_omnibus']
-
-        const userLabel = ['id', '제목', '5회차 기준 승격확률', '10회차 기준 승격확률', 
-        '5회차 긍정댓글수', '1회차 조회수', '5회차 평점참여인원', 
-        '정식승격 작품의 5회차 긍정댓글수 평균', '정식승격 작품의 1회차 조회수 평균','정식승격 작품의 5회차 평점참여인원 평균', 
-        '동일 전개방식 작품의 5회차의 긍정댓글수','동일 전개방식 작품의 1회차의 조회수', '동일 전개방식 작품의 5회차의 평점참여인원', 
-        '긍정댓글수', '조회수', '평점참여인원', 
-        '정식승격 작품의 회차별 긍정댓글수 평균', '정식승격 작품의 회차별 조회수 평균', '정식승격 작품의 회차별 평점참여인원 평균',
-        '동일 전개방식 작품의 긍정댓글수 평균', '동일 전개방식 작품의 조회수 평균', '동일 전개방식 작품의 평점참여인원 평균',
-        '댓글수', '댓글 작성자', 
-        '긍정 키워드1', '긍정 키워드2', '긍정 키워드3', 
-        '부정 키워드1', '부정 키워드2', '부정 키워드3', 
-        '승격여부', 
-        'first_positive_5_story', 'second_view_1_story', 'third_rating_people_5_story', 
-        'positive_story', 'view_story', 'rating_people_story', 
-        'first_positive_5_omnibus', 'second_view_1_omnibus', 
-        'third_rating_people_5_omnibus', 'positive_omnibus', 
-        'view_omnibus', 'rating_people_omnibus']
-
-        let userlabelforchart = [[],[],[],[],
-            ['5회차 긍정댓글수'], ['1회차 조회수'], ['5회차 평점참여인원'], 
-            ['정식승격 작품의','5회차 긍정댓글수 평균'], ['정식승격 작품','1회차 조회수 평균'],['정식승격 작품의','5회차 평점참여인원 평균'], 
-            ['동일 전개방식 작품의','5회차의 긍정댓글수'],['동일 전개방식 작품의','1회차의 조회수'], ['동일 전개방식 작품의','5회차의 평점참여인원'], 
-            ['긍정댓글 수'], ['조회수'], ['평점참여인원'], 
-            ['정식승격 작품의','긍정댓글수 평균'], ['정식승격 작품의','조회수 평균'], ['정식승격 작품의','5회차 평점참여인원 평균'],
-            ['동일 전개방식 작품의','긍정댓글수 평균'], ['동일 전개방식 작품의','조회수 평균'], ['동일 전개방식 작품의','평점참여인원 평균']
-        ]
-
-        const nfeatures = [
-        'first_positive_5', 'second_view_1','third_rating_people_5', 
-        'first_positive_5_1', 'second_view_1_1',
-        'third_rating_people_5_1', 'first_positive_5_episode',
-        'second_view_1_episode', 'third_rating_people_5_episode', 'positive',
-        'view', 'rating_people', 'positive_1', 'view_1', 'rating_people_1',
-        'positive_episode', 'view_episode', 'rating_people_episode',
-        'comment_writer_count', 'first_positive_5_story',
-        'second_view_1_story', 'third_rating_people_5_story', 'positive_story',
-        'view_story', 'rating_people_story', 'first_positive_5_omnibus',
-        'second_view_1_omnibus', 'third_rating_people_5_omnibus',
-        'positive_omnibus', 'view_omnibus', 'rating_people_omnibus'
-        ]
-
-        const readCsv = (path) => {
-            let arcnt = 0
-            dfd.read_csv(path)
-            .then(df => {
-                eval('newdf'+' =df.groupby(["id"])')
-                
-                ar = df.values
-                lastdataDf = newdf.get_groups([lastData]).values
-                arcnt = Array.from({length:lastdataDf.length}, (v,i)=>i+1+'회')
-
-                console.log(df.columns)
-                
-                arids                         = Array.from(lastdataDf, x => x.at(0))
-                artitle                       = Array.from(lastdataDf, x => x.at(2))
-                promote5                      = Math.round(lastdataDf.at(0).at(4))
-                promote10                     = Math.round(lastdataDf.at(0).at(3))
-                promote5                      = Math.ceil(lastdataDf.at(0).at(4)*100)
-                promote10                     = Math.ceil(lastdataDf.at(0).at(3)*100)
-                
-                first_positive_5              = Array.from(lastdataDf, x => x.at(5))
-                second_view_1                 = Array.from(lastdataDf, x => x.at(6))
-                third_rating_people_5         = Array.from(lastdataDf, x => x.at(7))
-
-                first_positive_5_1            = Math.ceil(lastdataDf.at(0).at(8))
-                second_view_1_1               = Math.ceil(lastdataDf.at(0).at(9))
-                third_rating_people_5_1       = Math.ceil(lastdataDf.at(0).at(10))
-
-                arPositive                    = Array.from(lastdataDf, x => Math.ceil(x.at(20)))
-                arView                        = Array.from(lastdataDf, x => Math.ceil(x.at(21)))
-                arRating                      = Array.from(lastdataDf, x => Math.ceil(x.at(22)))
-
-                arPositiveTotal               = Array.from(lastdataDf, x => Math.ceil(x.at(23)))
-                arViewTotal                   = Array.from(lastdataDf, x => Math.ceil(x.at(24)))
-                arRatingTotal                 = Array.from(lastdataDf, x => Math.ceil(x.at(25)))
-
-                if (ar.at(0).at(3) === 'episode') {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(11))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(12))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(13))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(26))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(27))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(28))
-                } else if (ar.at(0).at(3) === 'omnibus') {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(14))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(15))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(16))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(29))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(30))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(31))
-                } else if (ar.at(0).at(3) === 'story') {
-                    first_positive_5_genre        = Math.ceil(lastdataDf.at(0).at(17))
-                    second_view_1_genre           = Math.ceil(lastdataDf.at(0).at(18))
-                    third_rating_people_5_genre   = Math.ceil(lastdataDf.at(0).at(19))
-                    positive_genre                = Math.ceil(lastdataDf.at(0).at(32))
-                    view_genre                    = Math.ceil(lastdataDf.at(0).at(33))
-                    rating_people_genre           = Math.ceil(lastdataDf.at(0).at(34))
-                }
-                
-                armax = new Array
-                armin = new Array
-                armax.push(Math.max.apply(null, first_positive_5))
-                armax.push(Math.max.apply(null, second_view_1))
-                armax.push(Math.max.apply(null, third_rating_people_5))
-
-                armax.push(Math.max.apply(null, arPositive))
-                armax.push(Math.max.apply(null, arView))
-                armax.push(Math.max.apply(null, arRating))
-
-                armax.push(Math.max.apply(null, arPositiveTotal))
-                armax.push(Math.max.apply(null, arViewTotal))
-                armax.push(Math.max.apply(null, arRatingTotal))
-
-                armin.push(Math.min.apply(null, first_positive_5))
-                armin.push(Math.min.apply(null, second_view_1))
-                armin.push(Math.min.apply(null, third_rating_people_5))
-                armin.push(Math.min.apply(null, arPositive))
-                armin.push(Math.min.apply(null, arView))
-                armin.push(Math.min.apply(null, arRating))
-                armin.push(Math.min.apply(null, arPositiveTotal))
-                armin.push(Math.min.apply(null, arViewTotal))
-                armin.push(Math.min.apply(null, arRatingTotal))
-                
-                for(let j=0;j<lastdataDf.length;j++){
-
-                    if (Math.ceil(lastdataDf.at(j).at(20)) === Math.ceil(armax.at(3))) {
-                        maxindex3 = j // max index
-                    } 
-                    if (Math.ceil(lastdataDf.at(j).at(21)) === Math.ceil(armax.at(4))) {
-                        maxindex4 = j // max index
-                    }
-                    if (Math.ceil(lastdataDf.at(j).at(22)) === Math.ceil(armax.at(5))) {
-                        maxindex5 = j // max index
-                    }
-                    
-                    if (Math.ceil(lastdataDf.at(j).at(20)) === Math.ceil(armin.at(3))) {
-                        minindex3 = j // max index
-                    } 
-                    if (Math.ceil(lastdataDf.at(j).at(21)) === Math.ceil(armin.at(4))){
-                        minindex4 = j // max index
-                    }
-                    if (Math.ceil(lastdataDf.at(j).at(22)) === Math.ceil(armin.at(5))){
-                        minindex5 = j // max index
-                    }
-                }
-                
-                console.log(maxindex3, maxindex4,maxindex5)
-                let circleSize = 10
-                let pointRadius3 = Array.from({length:lastdataDf.length}, (i)=>3)
-                let pointRadius4 = Array.from({length:lastdataDf.length}, (i)=>3)
-                let pointRadius5 = Array.from({length:lastdataDf.length}, (i)=>3)
-                pointRadius3 = pointRadius3.fill(circleSize,maxindex3,maxindex3+1)
-                pointRadius4 = pointRadius4.fill(circleSize,maxindex4,maxindex4+1)
-                pointRadius5 = pointRadius5.fill(circleSize,maxindex5,maxindex5+1)
-
-                pointRadius3 = pointRadius3.fill(circleSize,minindex3,minindex3+1)
-                pointRadius4 = pointRadius4.fill(circleSize,minindex4,minindex4+1)
-                pointRadius5 = pointRadius5.fill(circleSize,minindex5,minindex5+1)
-                
-                // styling 
-                const bgcolor = ['#00800050', '#ff0000','#fff000']
-                let bgcolorOpacity3 = Array.from({length:lastdataDf.length}, (i)=>bgcolor.at(1))
-                bgcolorOpacity3 = bgcolorOpacity3.fill(bgcolor.at(1)+'50',maxindex3,maxindex3+1)
-                bgcolorOpacity3 = bgcolorOpacity3.fill(bgcolor.at(1)+'50',minindex3,minindex3+1)
-    
-                let bgcolorOpacity4 = Array.from({length:lastdataDf.length}, (i)=>bgcolor.at(0))
-                bgcolorOpacity4 = bgcolorOpacity4.fill(bgcolor.at(0),maxindex4,maxindex4+1)
-                bgcolorOpacity4 = bgcolorOpacity4.fill(bgcolor.at(0),minindex4,minindex4+1)
-
-                let bgcolorOpacity5 = Array.from({length:lastdataDf.length}, (i)=>bgcolor.at(2))
-                bgcolorOpacity5 = bgcolorOpacity5.fill(bgcolor.at(2)+'50',maxindex5,maxindex5+1)
-                bgcolorOpacity5 = bgcolorOpacity5.fill(bgcolor.at(2)+'50',minindex5,minindex5+1)
-    
-                // console.log(pointRadius)
-                const ctx3 = document.getElementById('myChart3');
-                const ctx4 = document.getElementById('myChart4');
-                const ctx5 = document.getElementById('myChart5');
-
-                const data3 = {
-                    labels: arcnt,
-                    datasets: [
-                        {
-                            label: userLabel[13],
-                            data: arPositive,
-                            borderColor: bgcolor.at(1),
-                            backgroundColor: bgcolorOpacity3,
-                            pointRadius: pointRadius3,
-                            pointHoverRadius: 15
-                        },
-                        {
-                            label: userLabel[16],
-                            data: arPositiveTotal,
-                            borderColor: 'lightgray',
-                            backgroundColor: 'lightgray',
-                            pointRadius: 2,
-                            pointHoverRadius: 15
-                        }
-                    ]
-                }
-    
-                const data4 = {
-                    labels: arcnt,
-                    datasets: [
-                        {
-                            label: userLabel[14],
-                            data: arView,
-                            borderColor: bgcolor.at(0),
-                            backgroundColor: bgcolorOpacity4,
-                            pointRadius: pointRadius4,
-                            pointHoverRadius: 15
-                        },
-                        {
-                            label: userLabel[17],
-                            data: arViewTotal,
-                            borderColor: 'lightgray',
-                            backgroundColor: 'lightgray',
-                            pointRadius: 2,
-                            pointHoverRadius: 15
-                        }
-                    ]
-                }
-    
-                const data5 = {
-                    labels: arcnt,
-                    datasets: [
-                        {
-                            label: userLabel[15],
-                            data: arRating,
-                            borderColor: bgcolor.at(2),
-                            backgroundColor: bgcolorOpacity5,
-                            pointRadius: pointRadius5,
-                            pointHoverRadius: 15
-                        },
-                        {
-                            label: userLabel[18],
-                            data: arRatingTotal,
-                            borderColor: 'lightgray',
-                            backgroundColor: 'lightgray',
-                            pointRadius: 1,
-                            pointHoverRadius: 15
-                        }
-                    ]
-                }
-    
-                new Chart(ctx3, {
-                    type: 'line',
-                    data: data3,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    usePointStyle: true
-                                }
-                            }
-                        }
-                    }
-                });
-    
-                new Chart(ctx4, {
-                    type: 'line',
-                    data: data4,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    usePointStyle: true
-                                }
-                            }
-                        }
-                    }
-                });
-    
-                new Chart(ctx5, {
-                    type: 'line',
-                    data: data5,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    usePointStyle: true
-                                }
-                            }
-                        }
-                    }
-                });
-            }).then(function(){
-                let comment_target = document.getElementById('data3_analysis')
-                let comment_target2 = document.getElementById('data3_title')
-                let comments = ''
-                let comments1 = ''
-                let comments2 = ''
-                comments += '<div class="item"><span>[' + artitle[0] +'] ' + userLabel.at(13) + '</span><span class="count">'
-                comments1 += '<div class="item"><span>' + userLabel.at(16)  + '</span><span class="count">'
-                comments += ((Math.round(armax.at(3)) * 100)/100) + '개</em></span></div>'
-                comments1 += ((Math.round(armax.at(6)) * 100)/100) + '개</em></span></div>'
-                if ((((Math.round(armax.at(6)) - Math.round(armax.at(3))) * 100)/100)<0) {
-                    comments1 += '<div>최고 '+ userLabel.at(13) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'high' + '">' + Math.abs(((Math.round(armax.at(3)) - Math.round(armax.at(6))) * 100)/100) + '개</em> 많아요!</div>'
-                } else {
-                    comments1 += '<div>최고 '+ userLabel.at(13) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'low' + '">' + Math.abs(((Math.round(armax.at(6)) - Math.round(armax.at(3))) * 100)/100) + '개</em> 적어요.</div>'
-                }
-                comments2 += userLabel.at(13) + '에 대한 분석'
-                comments += comments1
-                comment_target.innerHTML = comments
-                comment_target2.innerHTML = comments2
-            }).then(function(){
-                let comment_target = document.getElementById('data4_analysis')
-                let comment_target2 = document.getElementById('data4_title')
-                let comments = ''
-                let comments1 = ''
-                let comments2 = ''
-                comments += '<div class="item"><span>[' + artitle[0] +'] ' + userLabel.at(14) + '</span><span class="count">'
-                comments1 += '<div class="item"><span>' + userLabel.at(17)  + '</span><span class="count">'
-                comments += ((Math.round(armax.at(4)) * 100)/100) + '회</em></span></div>'
-                comments1 += ((Math.round(armax.at(7)) * 100)/100) + '회</em></span></div>'
-                if ((((Math.round(armax.at(7)) - Math.round(armax.at(4))) * 100)/100)<0) {
-                    comments1 += '<div>최고 '+ userLabel.at(14) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'high' + '">' + Math.abs(((Math.round(armax.at(4)) - Math.round(armax.at(7))) * 100)/100) + '회</em> 많아요!</div>'
-                } else {
-                    comments1 += '<div>최고 '+ userLabel.at(14) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'low' + '">' + Math.abs(((Math.round(armax.at(7)) - Math.round(armax.at(4))) * 100)/100) + '회</em> 적어요.</div>'
-                }
-                comments2 += userLabel.at(14) + '에 대한 분석'
-                comments += comments1
-                comment_target.innerHTML = comments
-                comment_target2.innerHTML = comments2
-            }).then(function(){
-                let comment_target = document.getElementById('data5_analysis')
-                let comment_target2 = document.getElementById('data5_title')
-                let comments = ''
-                let comments1 = ''
-                let comments2 = ''
-                comments += '<div class="item"><span>[' + artitle[0] +'] ' + userLabel.at(15) + '</span><span class="count">'
-                comments1 += '<div class="item"><span>' + userLabel.at(18)  + '</span><span class="count">'
-                comments += ((Math.round(armax.at(5)) * 100)/100) + '명</em></span></div>'
-                comments1 += ((Math.round(armax.at(8)) * 100)/100) + '명</em></span></div>'
-                if ((((Math.round(armax.at(8)) - Math.round(armax.at(5))) * 100)/100)<0) {
-                    comments1 += '<div>최고 '+ userLabel.at(15) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'high' + '">' + Math.abs(((Math.round(armax.at(5)) - Math.round(armax.at(8))) * 100)/100) + '명</em> 많아요!</div>'
-                } else {
-                    comments1 += '<div>최고 '+ userLabel.at(15) + ' 기준 정식연재된 작품과 비교해 약 ' + '<em class="' + 'low' + '">' + Math.abs(((Math.round(armax.at(8)) - Math.round(armax.at(5))) * 100)/100) + '명</em> 적어요.</div>'
-                }
-                comments2 += userLabel.at(15) + '에 대한 분석'
-                comments += comments1
-                comment_target.innerHTML = comments
-                comment_target2.innerHTML = comments2
-            }).catch(err => {
-                console.log(err);
-            })
-        }
         readCsv("../data/total/" + readfile)
         localStorage.setItem('id',lastData)
         console.log('현재 실행 중 파일은 '+readfile+'이고 아이디는 '+lastData+'입니다.')

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="./styles/styles.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <script src="./js/thumb.js"></script>
 
     <script>
         $(document).ready(function(){
@@ -34,7 +35,7 @@
             <div class="search_area">
                 <div id="searchbar" class="searchbar">
                     <input type="text" placeholder='베도의 띵작을 입력하세요!'>
-                    <input type="button" id='gosearch' alt="겸색하기" value="띵작 찾기" class="hlight">
+                    <input type="button" id="gosearch" alt="겸색하기" value="띵작 찾기" class="hlight">
                 </div>
             </div>
             <p class="sub">5회차 이상 연재된 작품만 검색 가능합니다.</p>
@@ -42,40 +43,18 @@
         </div>
     </div>
     <script>
-        let ar
-        let dataLabel = ['id','title','thumbnail']
-        let userLabel = ['id','제목','섬네일']
-        const readCsv = (path) => {
-            let arcnt = 0
-            dfd.read_csv(path)
-            .then(df => {
-                ar = df.values
-            }).then(function(){
-                let ids, titles, thumbnails
-                ids = Array.from(ar, x => x.at(0))
-                titles = Array.from(ar, x => x.at(1))
-                thumbnails = Array.from(ar, x => x.at(2))
-
-            }).catch(err => {
-                console.log(err);
-            })
-        }
-
-        const targetLink = './pages/itemlist.html'
-        const hrefLink = () => {
-            location.href = targetLink
-        }
         const divElement = document.getElementById('gosearch')
         divElement.addEventListener('click', (e) => {
             let targetElement = e.target;
             targetElement = targetElement.previousElementSibling
             enteredKeyword = targetElement.value 
             localStorage.setItem('keyword',enteredKeyword)
-            console.log(enteredKeyword)
             hrefLink()
         });
 
-        readCsv("./data/total/"+'item_thumbnail.csv')
+        let targetLink = './pages/itemlist.html'
+
+        readCsvThumb("./data/total/"+'item_thumbnail.csv')
     </script>
 </body>
 </html>

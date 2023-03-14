@@ -213,11 +213,13 @@ em {
     padding-bottom: 20px;
     display: flex;
     justify-content: space-between;
+    text-align: right;
 }
 
 .summary_wrap .summary_title .title {
     font-size: 20px;
     word-break: keep-all;
+    text-align: left;
 }
 
 .summary_wrap .sub {
@@ -229,13 +231,20 @@ em {
     font-size: 1rem;
     margin: 0;
 } 
+
 .summary_wrap #promote {
     font-size: 56px;
     font-weight: bold;
     color: #00d364;
     line-height: 1;
-    padding: 10px 0 6px;
     display: inline-block;
+    position: relative;
+}
+.summary_wrap #promote:after {
+    content: '%';
+    font-size: 34px;
+    font-weight: normal;
+    text-align: left;
 }
 
 .summary_wrap > div + div {
