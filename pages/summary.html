@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>작전명: 띵작을 찾아서</title>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script src="../js/chartjs/chart.js"></script>
-    <script src="../js/danfo0.1.1/index.min.js"></script>
-    <link rel="stylesheet" href="../styles/styles.css">
+    <script src="../styles/js/chartjs/chart.js"></script>
+    <script src="../styles/js/danfo0.1.1/index.min.js"></script>
+    <link rel="stylesheet" href="../styles/css/styles.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script src="../js/analysis.js"></script>
+    <script src="../styles/js/analysis.js"></script>
     <script>
         $(document).ready(function(){
             $('.slider').slick({
@@ -28,6 +28,7 @@
     <div id="wrap">
         <div class="summary_wrap">
             <div class="summary_part">
+                <div id="wtthumb" class="summary_img"></div>
                 <div class="summary_title">
                     <h3 class="title"><em id="wttitle"></em>의 <br />정식연재 확률은?<br /></h3>
                     <div>
@@ -77,9 +78,10 @@
         </div>
     </div>
     <script>
-        let lastData, readfile
+        let lastData, lastSrc, readfile
         if(localStorage.getItem('id')){
             lastData = localStorage.getItem('id')
+            lastSrc = localStorage.getItem('src')
             readfile = (Number(lastData)<379105) ? 'result1.csv' : 
                        (Number(lastData)<592330) ? 'result2.csv' :
                        (Number(lastData)<671376) ? 'result3.csv' :
