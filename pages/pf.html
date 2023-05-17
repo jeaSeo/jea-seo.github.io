@@ -42,8 +42,7 @@
                         </h4>
                         <p class="summary">
                             행내 자료공유 서비스 구축 프로젝트<br />
-                            - 토대가 되는 디자인은 에이전시를 통해 전달받아 작업<br />
-                              하였으나 수정이 유난히 많았음<br />
+                            <!-- - 토대가 되는 디자인은 에이전시를 통해 전달받았으나 수정이 50% 이상<br /> -->
                             - 기능 추가/변경에 대해 기획 및 디자인 진행<br />
                             - 다양한 케이스에 대응할 수 있는 퍼블리싱
                         </p>
@@ -855,20 +854,23 @@
     const controller = new ScrollMagic.Controller();
     const els = document.querySelectorAll('.main_content')
 
-    els.forEach(function(article) {
-        let elId        = '#' + article.childNodes[1].getAttribute('id')
-        let elPinId     = '#' + article.childNodes[3].childNodes[1].getAttribute('id')
-        let elTitHeight = article.childNodes[3].childNodes[1].offsetHeight
-        let elConHeight = article.childNodes[3].childNodes[3].offsetHeight
+    // setTimeout(function() { // Code here 
+    // }, delay);
 
-        new ScrollMagic.Scene({
-            triggerElement: elId
-            , duration: elConHeight - elTitHeight
-            , offset: 300
-        }).setPin(elPinId)
-          .addTo(controller)
-    })
+    window.onload = 
+        els.forEach(function(article) {
+                let elId        = '#' + article.childNodes[1].getAttribute('id')
+                let elPinId     = '#' + article.childNodes[3].childNodes[1].getAttribute('id')
+                let elTitHeight = article.childNodes[3].childNodes[1].offsetHeight
+                let elConHeight = article.childNodes[3].childNodes[3].offsetHeight
 
+                new ScrollMagic.Scene({
+                    triggerElement: elId
+                    , duration: elConHeight - elTitHeight
+                    , offset: 300
+                }).setPin(elPinId)
+                .addTo(controller)
+            })
     window.addEventListener('scroll', () => {
         let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
         let windowHeight = window.innerHeight; // 스크린 창
