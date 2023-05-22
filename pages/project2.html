@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서제아 포트폴리오</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/debug.addIndicators.min.js"></script>
+    <link rel="stylesheet" href="../styles/css/pf.min.css">
+</head>
+<body>
+    <div id="wrap" class="wrap">
+        <header>
+            <div class="header_wrap">
+                <div class="left">
+                    <a href="./pf.html" class="page_link"><span>SEO JEA</span></a>
+                </div>
+                <div class="right">
+                    <a href="https://deeply-caboc-710.notion.site/5ca322fca6ae4857a6c9d8fc54eeac30" target="_blank" class="page_link">이력서 <span class="badge">Notion</span></a>
+                    <a href="./carrer.html" class="page_link">경력기술서</a>
+                </div>
+            </div>
+        </header>
+        <section>
+            <div class="section_bg pj2"></div>
+            <div class="title_wrap">
+                <div class="title">SKNS 포털 구축</div>
+                <div class="desc">
+                    소통과 정보 공유의 목적을 달성할 수 있는 정보의 중요도에 맞춘 UX를 제공하고<br />
+                    다양한 기능을 포함하는 웹파트의 UI가 잘 어우러질 수 있도록 디자인하였습니다.
+                </div>
+                <div class="info_list">
+                    <span class="info_title">작업기여도</span>
+                    <ul class="">
+                        <li class="item">디자인 20%</li>
+                        <li class="item">웹 퍼블리싱 100%</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content_block first">
+                <div class="img_wrap w768">
+                    <img src="../styles/images/pf/skns/skns1.png" alt="skns 첫번째 이미지">
+                </div>
+            </div>
+            <div class="content_block">
+                <div class="text_wrap">
+                    <div class="title">
+                        다양한 뷰모드를 제공하는 게시판
+                    </div>
+                    <div class="desc">
+                        동일한 게시판에 대해서 사용자가 뷰모드를 선택할 수 있는 기능을 제공하여<br />
+                        사용자가 보다 주조덕으로 사이트를 이용할 수 있도록 하였고, 각 뷰모드 특성에 맞춘 디자인을 제공하였습니다.
+                    </div>
+                </div>
+                <div class="img_wrap w1000">
+                    <img src="../styles/images/pf/skns/skns2.png" alt="skns 게시판 설명 이미지">
+                </div>
+            </div>
+            <div class="content_block">
+                <div class="text_wrap center">
+                    <div class="title">
+                        쉬운 사용을 위한 기능적인 UI
+                    </div>
+                    <div class="desc">기능적인 이해도를 높일 수 있는 UI를 제공하여 서비스에 대한 난이도를 낮추었습니다.</div>
+                </div>
+                <div class="img_wrap w1000">
+                    <img src="../styles/images/pf/skns/skns3.png" alt="skns 회의실예약 이미지">
+                </div>
+            </div>
+            <div class="content_block">
+                <div class="text_wrap">
+                    <div class="title">
+                        구성원과의 화합 도모를 위한 포털안의 포털
+                    </div>
+                    <div class="desc">
+                        표준 게시판, 일정 게시판, 갤러리 게시판 등을 통해 구성원간 소통이 가능한 커뮤니티를 제공합니다.                    </div>
+                </div>
+                <div class="img_wrap">
+                    <img src="../styles/images/pf/skns/skns4.png" alt="skns 커뮤니티 이미지">
+                </div>
+            </div>
+        </section>
+        <div class="go_front">
+            <a href="./pf.html" class="link">목록으로 돌아가기</a>
+        </div>
+    </div>
+    <div id="scrolltop" onclick="window.scrollTo(0, 0);" title="맨 위로"><img src="../styles/images/pf/arr_top.png" alt="위로 향하는 화살표"></div>
+    <div id="backcolor"></div>
+</body>
+<script>
+    window.addEventListener('scroll', () => {
+        let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
+        let windowHeight = window.innerHeight; // 스크린 창
+        let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
+
+        if(windowHeight < scrollLocation){
+            document.getElementById('scrolltop').style.cssText = 'opacity: 1;'
+        } else {
+            document.getElementById('scrolltop').style.cssText = 'opacity: 0;'
+        }
+    })
+    
+</script>
+</html>
